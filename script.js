@@ -14,9 +14,11 @@ cameraButton.addEventListener("click", async () => {
 
         // Get all video input devices
         const devices = await navigator.mediaDevices.enumerateDevices();
+        console.log(devices); // Log the devices to see available cameras
         const videoDevices = devices.filter(device => device.kind === "videoinput");
 
         if (videoDevices.length > 0) {
+            console.log("Found video devices:", videoDevices); // Log available video devices
             // Automatically start scanner with the first camera (we assume the first camera is the correct one)
             startScanner(videoDevices[0].deviceId);
         } else {
