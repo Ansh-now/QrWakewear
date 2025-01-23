@@ -6,8 +6,8 @@ const scannedDataElement = document.getElementById("scanned-data");
 cameraButton.addEventListener("click", async () => {
     try {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Request camera stream with "environment" facing mode (rear camera)
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } });
+            // Request camera stream with "environment" facing mode (rear/main camera)
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
 
             // Attach the stream to the video element for preview
             videoElement.srcObject = stream;
@@ -33,8 +33,8 @@ cameraButton.addEventListener("click", async () => {
 function startScanner() {
     const qrScanner = new Html5Qrcode("scanner-container");
     qrScanner.start(
-        { facingMode: { exact: "environment" } }, // Use rear camera (main camera)
-        { fps: 10, qrbox: 250 },                 // Scanner settings
+        { facingMode: "environment" }, // Use rear camera (main camera)
+        { fps: 10, qrbox: 250 },       // Scanner settings
         (decodedText) => {
             console.log(`QR Code scanned: ${decodedText}`);
             scannedDataElement.textContent = `Scanned Data: ${decodedText}`;
