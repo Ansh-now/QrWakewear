@@ -1,51 +1,25 @@
-const cameraButton = document.getElementById("cameraButton");
-const statusElement = document.getElementById("status");
-const videoElement = document.getElementById("camera-stream");
-const scannedDataElement = document.getElementById("scanned-data");
-
-cameraButton.addEventListener("click", async () => {
+document.getElementById('getDeviceButton').addEventListener('click', async function () {
     try {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Request camera stream with "environment" facing mode (rear/main camera)
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        // Fetch available devices
+        const devices = await navigator.mediaDevices.enumerateDevices();
 
-            // Attach the stream to the video element for preview
-            videoElement.srcObject = stream;
-            videoElement.style.display = "block";
+        // Filter out video devices (cameras)
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
-            // Update status
-            statusElement.textContent = "Camera is ready!";
-            statusElement.style.color = "green";
-
-            // Initialize QR Code Scanner
-            startScanner();
-        } else {
-            statusElement.textContent = "Camera access is not supported on this browser.";
-            statusElement.style.color = "red";
+        if (videoDevices.length === 0) {
+            document.getElementById('device-info').textContent = 'No video devices found.';
+            return;
         }
+
+        // Display all video devices and their details (including deviceId)
+        let deviceInfoText = 'Available Camera Devices:\n';
+        videoDevices.forEach((device, index) => {
+            deviceInfoText += `Device ${index + 1}: ${device.label} - deviceId: ${device.deviceId}\n`;
+        });
+
+        document.getElementById('device-info').textContent = deviceInfoText;
     } catch (error) {
-        statusElement.textContent = "Camera permission denied or an error occurred.";
-        statusElement.style.color = "red";
-        console.error("Camera error:", error);
+        console.error('Error fetching devices:', error);
+        document.getElementById('device-info').textContent = 'Error fetching devices.';
     }
 });
-
-function startScanner() {
-    const qrScanner = new Html5Qrcode("scanner-container");
-    qrScanner.start(
-        { facingMode: "user" }, // Use rear camera (main camera)
-        { fps: 10, qrbox: 250 },       // Scanner settings
-        (decodedText) => {
-            console.log(`QR Code scanned: ${decodedText}`);
-            scannedDataElement.textContent = `Scanned Data: ${decodedText}`;
-            qrScanner.stop(); // Stop scanner after scanning
-        },
-        (errorMessage) => {
-            console.warn(`QR Code scan error: ${errorMessage}`);
-        }
-    ).catch((error) => {
-        console.error("Scanner initialization failed:", error);
-        statusElement.textContent = "Unable to start scanner.";
-        statusElement.style.color = "red";
-    });
-}
