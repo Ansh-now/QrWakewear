@@ -11,13 +11,17 @@ document.getElementById('getDeviceButton').addEventListener('click', async funct
             return;
         }
 
-        // Display all video devices and their details (including deviceId)
-        let deviceInfoText = 'Available Camera Devices:\n';
+        // Display all video devices and their details (including deviceId) in console
+        console.log("Available Camera Devices:");
+        let deviceInfoText = '';
         videoDevices.forEach((device, index) => {
+            console.log(`Device ${index + 1}: ${device.label} - deviceId: ${device.deviceId}`);
             deviceInfoText += `Device ${index + 1}: ${device.label} - deviceId: ${device.deviceId}\n`;
         });
 
+        // Show the device info on the webpage
         document.getElementById('device-info').textContent = deviceInfoText;
+
     } catch (error) {
         console.error('Error fetching devices:', error);
         document.getElementById('device-info').textContent = 'Error fetching devices.';
