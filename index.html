@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WakeWear QR Scanner</title>
+    
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        QR Code Scanner
+        <div class="branding">Powered by WakeWear</div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <h2>Scan a QR Code</h2>
+        <div id="scanner">
+            <!-- QR Code scanner container -->
+        </div>
+        <p id="scanned-data">Scanned Data: None</p>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 WakeWear</p>
+    </footer>
+
+    <!-- JavaScript for QR Code Scanning -->
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(`QR Code scanned: ${decodedText}`);
+            document.getElementById('scanned-data').innerText = `Scanned Data: ${decodedText}`;
+        }
+
+        function onScanError(errorMessage) {
+            console.warn(`QR Code scan error: ${errorMessage}`);
+        }
+
+        function startScanner() {
+            const qrScanner = new Html5Qrcode("scanner");
+            qrScanner.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: 250 }, 
+                onScanSuccess, 
+                onScanError
+            );
+        }
+
+        // Start the scanner on page load
+        window.onload = startScanner;
+    </script>
+</body>
+</html>
