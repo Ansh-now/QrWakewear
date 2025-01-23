@@ -10,7 +10,7 @@ cameraButton.addEventListener("click", async () => {
     try {
         // Stop any existing scanner
         if (qrScanner) {
-            qrScanner.stop();
+            await qrScanner.stop();
         }
 
         // Get all video input devices
@@ -24,21 +24,22 @@ cameraButton.addEventListener("click", async () => {
                 .join("");
             cameraSelect.style.display = "block";
 
-            // Start the scanner with the selected camera
+            // Automatically start scanner with the first camera
             startScanner(videoDevices[0].deviceId);
 
-            // Handle camera switch
+            // Handle camera switch on dropdown change
             cameraSelect.addEventListener("change", () => {
                 startScanner(cameraSelect.value);
             });
         } else {
             statusElement.textContent = "No camera found.";
             statusElement.style.color = "red";
+            console.error("No video input devices available.");
         }
     } catch (error) {
         statusElement.textContent = "Error accessing cameras.";
         statusElement.style.color = "red";
-        console.error("Camera error:", error);
+        console.error("Camera access error:", error);
     }
 });
 
@@ -50,7 +51,7 @@ async function startScanner(deviceId) {
 
         qrScanner = new Html5Qrcode("scanner");
         await qrScanner.start(
-            { deviceId: { exact: deviceId } }, 
+            { deviceId: { exact: deviceId } },
             { fps: 10, qrbox: 250 },
             (decodedText) => {
                 console.log(`QR Code scanned: ${decodedText}`);
