@@ -18,8 +18,11 @@ cameraButton.addEventListener("click", async () => {
                 return;
             }
 
-            // Find the rear camera (environment) and get its deviceId
-            const rearCamera = videoDevices.find(device => device.facingMode === "environment");
+            // Try to find the rear camera by filtering the video devices
+            const rearCamera = videoDevices.find(device => {
+                // Attempt to match facingMode "environment" based on device label or other properties
+                return device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear');
+            });
 
             if (!rearCamera) {
                 statusElement.textContent = "Rear camera not found.";
