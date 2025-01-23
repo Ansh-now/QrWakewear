@@ -64,6 +64,16 @@ button.theme-button:hover {
     color: #ffd700;
 }
 
+#cameraSelect {
+    margin: 10px 0;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ffd700;
+    border-radius: 5px;
+    background-color: #000;
+    color: #ffd700;
+}
+
 #scanner-container {
     margin-top: 20px;
     width: 100%;
