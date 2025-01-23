@@ -2,7 +2,6 @@ const cameraButton = document.getElementById("cameraButton");
 const statusElement = document.getElementById("status");
 const scannerElement = document.getElementById("scanner");
 const scannedDataElement = document.getElementById("scanned-data");
-const cameraSelect = document.getElementById("cameraSelect");
 
 let qrScanner = null;
 
@@ -18,19 +17,8 @@ cameraButton.addEventListener("click", async () => {
         const videoDevices = devices.filter(device => device.kind === "videoinput");
 
         if (videoDevices.length > 0) {
-            // Populate camera dropdown
-            cameraSelect.innerHTML = videoDevices
-                .map((device, index) => `<option value="${device.deviceId}">${device.label || `Camera ${index + 1}`}</option>`)
-                .join("");
-            cameraSelect.style.display = "block";
-
-            // Automatically start scanner with the first camera
+            // Automatically start scanner with the first camera (we assume the first camera is the correct one)
             startScanner(videoDevices[0].deviceId);
-
-            // Handle camera switch on dropdown change
-            cameraSelect.addEventListener("change", () => {
-                startScanner(cameraSelect.value);
-            });
         } else {
             statusElement.textContent = "No camera found.";
             statusElement.style.color = "red";
