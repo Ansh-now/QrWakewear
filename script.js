@@ -33,7 +33,7 @@ cameraButton.addEventListener("click", async () => {
 function startScanner() {
     const qrScanner = new Html5Qrcode("scanner-container");
     qrScanner.start(
-        { facingMode: "environment" }, // Use rear camera (main camera)
+        { facingMode: "user" }, // Use rear camera (main camera)
         { fps: 10, qrbox: 250 },       // Scanner settings
         (decodedText) => {
             console.log(`QR Code scanned: ${decodedText}`);
