@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Camera Device ID</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WakeWear QR Scanner</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
-    <h1>Get Camera Device ID</h1>
-    <button id="getDeviceButton">Get Camera Device ID</button>
-    <div id="device-info"></div>
+    <!-- Header Section -->
+    <header>
+        QR Code Scanner
+        <div class="branding">Powered by WakeWear</div>
+    </header> 
 
-    <script src="script.js"></script>
+    <!-- Main Content Section -->
+    <main>
+        <h2>Scan a QR Code</h2>
+        <button id="cameraButton" class="theme-button">Request Camera Permission</button>
+        <p id="status"></p> 
+
+        <!-- Video Stream for Camera -->
+        <div id="scanner-container">
+            <video id="camera-stream" autoplay playsinline></video>
+        </div>
+        <p id="scanned-data">Scanned Data: None</p>
+    </main> 
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 WakeWear</p>
+    </footer> 
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
 </body>
-</html>
+</html> 
