@@ -6,35 +6,9 @@ const scannedDataElement = document.getElementById("scanned-data");
 cameraButton.addEventListener("click", async () => {
     try {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Get available media devices (cameras)
-            const devices = await navigator.mediaDevices.enumerateDevices();
-
-            // Filter video devices (cameras)
-            const videoDevices = devices.filter(device => device.kind === 'videoinput');
-
-            if (videoDevices.length === 0) {
-                statusElement.textContent = "No video devices found.";
-                statusElement.style.color = "red";
-                return;
-            }
-
-            // Try to find the rear camera by filtering the video devices
-            const rearCamera = videoDevices.find(device => {
-                // Attempt to match facingMode "environment" based on device label or other properties
-                return device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear');
-            });
-
-            if (!rearCamera) {
-                statusElement.textContent = "Rear camera not found.";
-                statusElement.style.color = "red";
-                return;
-            }
-
-            const deviceId = rearCamera.deviceId; // Store the deviceId of the rear camera
-
-            // Request camera stream using the selected deviceId
+            // Request camera stream using the provided deviceId
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { deviceId: { exact: deviceId } } // Use the exact deviceId
+                video: { deviceId: { exact: "0d0ea2442c02a4f18b0caf8b2c505053905dedea8a431370d28ac0428e0561fc" } } // Use provided deviceId
             });
 
             // Attach the stream to the video element for preview
