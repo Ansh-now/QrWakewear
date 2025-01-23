@@ -1,10 +1,7 @@
 const cameraButton = document.getElementById("cameraButton");
 const statusElement = document.getElementById("status");
 const videoElement = document.getElementById("camera-stream");
-const scannerElement = document.getElementById("scanner");
 const scannedDataElement = document.getElementById("scanned-data");
-
-let qrScanner;
 
 cameraButton.addEventListener("click", async () => {
     try {
@@ -21,7 +18,7 @@ cameraButton.addEventListener("click", async () => {
             statusElement.style.color = "green";
 
             // Initialize QR Code Scanner
-            startScanner(stream);
+            startScanner();
         } else {
             statusElement.textContent = "Camera access is not supported on this browser.";
             statusElement.style.color = "red";
@@ -33,15 +30,8 @@ cameraButton.addEventListener("click", async () => {
     }
 });
 
-function startScanner(stream) {
-    // Stop any previous scanner
-    if (qrScanner) {
-        qrScanner.stop();
-    }
-
-    // Initialize HTML5 QR Code Scanner
-    qrScanner = new Html5Qrcode("scanner");
-
+function startScanner() {
+    const qrScanner = new Html5Qrcode("scanner-container");
     qrScanner.start(
         { facingMode: "environment" }, // Use rear camera
         { fps: 10, qrbox: 250 },       // Scanner settings
