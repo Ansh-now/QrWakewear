@@ -24,8 +24,9 @@
         <button id="cameraButton" class="theme-button">Request Camera Permission</button>
         <p id="status"></p>
 
-        <!-- QR Scanner -->
-        <div id="scanner"></div>
+        <!-- Video Stream for Camera -->
+        <video id="camera-stream" autoplay playsinline style="display: none; width: 100%; height: 400px; border: 2px solid black;"></video>
+        <div id="scanner" style="width: 100%; height: 400px;"></div>
         <p id="scanned-data">Scanned Data: None</p>
     </main>
 
