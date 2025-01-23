@@ -21,9 +21,12 @@
     <!-- Main Content Section -->
     <main>
         <h2>Scan a QR Code</h2>
-        <div id="scanner">
-            <!-- QR Code scanner container -->
-        </div>
+        <!-- Button to Request Camera Permission -->
+        <button id="cameraButton" class="theme-button">Request Camera Permission</button>
+        <p id="status"></p>
+
+        <!-- QR Code Scanner Container -->
+        <div id="scanner"></div>
         <p id="scanned-data">Scanned Data: None</p>
     </main>
 
@@ -32,29 +35,7 @@
         <p>© 2025 WakeWear</p>
     </footer>
 
-    <!-- JavaScript for QR Code Scanning -->
-    <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            console.log(`QR Code scanned: ${decodedText}`);
-            document.getElementById('scanned-data').innerText = `Scanned Data: ${decodedText}`;
-        }
-
-        function onScanError(errorMessage) {
-            console.warn(`QR Code scan error: ${errorMessage}`);
-        }
-
-        function startScanner() {
-            const qrScanner = new Html5Qrcode("scanner");
-            qrScanner.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: 250 }, 
-                onScanSuccess, 
-                onScanError
-            );
-        }
-
-        // Start the scanner on page load
-        window.onload = startScanner;
-    </script>
+    <!-- Link to External JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
