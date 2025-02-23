@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WakeWear Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="night-background">
+  <!-- 🌌 Starry Background -->
+  <div class="stars"></div>
+
+  <!-- 🔒 Login Container with Close Icon -->
+  <div class="login-container">
+    <span class="close-login">&times;</span> <!-- ❌ Close Icon -->
+    <h1>WakeWear Login</h1>
+    <form id="loginForm">
+      <div class="input-field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="login-button">Login</button>
+    </form>
+
+    <!-- 🌐 Social Login Options -->
+    <div class="social-login">
+      <button class="google-login">
+        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo"> Login with Google
+      </button>
+      <button class="apple-login">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/mac-os.png" alt="Apple Logo"> Login with Apple
+      </button>
+    </div>
+
+    <!-- 🔗 Registration Link -->
+    <div class="register-link">
+      <p>Don't have an account? <a href="#">Sign up here</a></p>
+    </div>
+  </div>
+
+  <!-- 🔗 Link JS File -->
+  <script src="script.js"></script>
+</body>
+</html>
