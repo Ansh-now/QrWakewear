@@ -1,51 +1,102 @@
-const cameraButton = document.getElementById("cameraButton");
-const statusElement = document.getElementById("status");
-const videoElement = document.getElementById("camera-stream");
-const scannedDataElement = document.getElementById("scanned-data"); 
+"use strict";
 
-cameraButton.addEventListener("click", async () => {
-    try {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Request camera stream
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); 
+document.addEventListener("DOMContentLoaded", function () {
+  // ---- Star Background Creation ----
+  const starsContainer = document.querySelector(".stars");
+  const numberOfStars = 150;
+  for (let i = 0; i < numberOfStars; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    // Random position within the viewport
+    star.style.top = Math.random() * 150 + "%";
+    star.style.left = Math.random() * 150 + "%";
+    // Randomize animation duration for variety
+    star.style.animationDuration = 3 + Math.random() * 4 + "s";
+    starsContainer.appendChild(star);
+  }
 
-            // Attach the stream to the video element for preview
-            videoElement.srcObject = stream;
-            videoElement.style.display = "block"; 
+  // ---- Login Popup Functionality with Background Blur ----
+  const profileBtn = document.getElementById("profile-btn");
+  const loginPopup = document.getElementById("login-popup");
+  const closeLogin = document.getElementById("close-login");
+  const pageContent = document.getElementById("page-content");
 
-            // Update status
-            statusElement.textContent = "Camera is ready!";
-            statusElement.style.color = "green"; 
+  profileBtn.addEventListener("click", function () {
+    loginPopup.style.display = "block";
+    if (pageContent) {
+      pageContent.classList.add("blurred");
+    }
+  });
 
-            // Initialize QR Code Scanner
-            startScanner();
-        } else {
-            statusElement.textContent = "Camera access is not supported on this browser.";
-            statusElement.style.color = "red";
-        }
-    } catch (error) {
-        statusElement.textContent = "Camera permission denied or an error occurred.";
-        statusElement.style.color = "red";
-        console.error("Camera error:", error);
-    }
-}); 
+  closeLogin.addEventListener("click", function () {
+    loginPopup.style.display = "none";
+    if (pageContent) {
+      pageContent.classList.remove("blurred");
+    }
+  });
 
-function startScanner() {
-    const qrScanner = new Html5Qrcode("scanner-container");
-    qrScanner.start(
-        { facingMode: "environment" }, // Use rear camera
-        { fps: 10, qrbox: 250 },       // Scanner settings
-        (decodedText) => {
-            console.log(`QR Code scanned: ${decodedText}`);
-            scannedDataElement.textContent = `Scanned Data: ${decodedText}`;
-            qrScanner.stop(); // Stop scanner after scanning
-        },
-        (errorMessage) => {
-            console.warn(`QR Code scan error: ${errorMessage}`);
-        }
-    ).catch((error) => {
-        console.error("Scanner initialization failed:", error);
-        statusElement.textContent = "Unable to start scanner.";
-        statusElement.style.color = "red";
-    });
+  // ---- Navigation Section Switching (for internal sections) ----
+  const navBtns = document.querySelectorAll("nav ul li a.nav-btn");
+  const contentSections = document.querySelectorAll(".content-section");
+
+  navBtns.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      // Allow default behavior for external links (e.g., buy.html)
+      if (btn.getAttribute("href").includes("buy.html")) return;
+
+      e.preventDefault();
+      const sectionId = btn.getAttribute("data-section");
+      if (!sectionId) return;
+
+      // Hide all content sections
+      contentSections.forEach((section) => {
+        section.classList.remove("active");
+      });
+
+      // Show the selected section
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.classList.add("active");
+      }
+    });
+  });
+});
+
+// ---- Redirect to Buy Page ----
+function redirectToBuy() {
+  window.location.href = "buy.html";
 }
+const currentHour = new Date().getHours();
+if (currentHour >= 6 && currentHour < 18) {
+  document.body.classList.add("day-background");
+  document.body.classList.remove("night-background");
+} else {
+  document.body.classList.add("night-background");
+  document.body.classList.remove("day-background");
+}
+// ❌ Close Login Popup on Click
+const closeLogin = document.querySelector(".close-login");
+closeLogin.addEventListener("click", function () {
+  window.location.href = "index.html"; // Redirect to homepage
+});
+
+// 🔒 Handle Login Form Submission
+const loginForm = document.getElementById("loginForm");
+loginForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  alert("Login successful!"); // Placeholder for actual login
+});
+
+
+// 🎞️ Image Stack Slider Animation
+const images = document.querySelectorAll(".slider-image");
+let currentImage = 0;
+
+function showNextImage() {
+  images[currentImage].classList.remove("active");
+  currentImage = (currentImage + 1) % images.length;
+  images[currentImage].classList.add("active");
+}
+
+images[currentImage].classList.add("active");
+setInterval(showNextImage, 3000); // Swipe every 3 seconds
