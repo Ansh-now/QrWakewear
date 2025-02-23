@@ -1,42 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WakeWear QR Scanner</title>
-    
-    <!-- External CSS -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- QR Code Scanner Library -->
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WakeWear - Home</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Smooth Scrolling -->
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
-<body>
-    <!-- Header Section -->
-    <header>
-        QR Code Scanner
-        <div class="branding">Powered by WakeWear</div>
-    </header> 
+<body class="night-background">
+  <!-- ⭐ Star Background -->
+  <div class="stars"></div>
 
-    <!-- Main Content Section -->
-    <main>
-        <h2>Scan a QR Code</h2>
-        <button id="cameraButton" class="theme-button">Request Camera Permission</button>
-        <p id="status"></p> 
+  <!-- 🌌 Page Content Wrapper -->
+  <div id="page-content">
+    <!-- 🔝 Header with Navigation -->
+    <header>
+      <h1 class="wakewear-logo">WakeWear</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html#home" class="nav-btn active">Home</a></li>
+          <li><a href="index.html#features" class="nav-btn">Features</a></li>
+          <li><a href="index.html#technology" class="nav-btn">Technology</a></li>
+          <li><a href="index.html#contact" class="nav-btn">About Us</a></li>
+          <li><a href="buy.html" class="nav-btn buy-now">Buy Now</a></li>
+        </ul>
+      </nav>
+      <!-- 👤 Profile Icon Redirect -->
+      <div id="profile-btn" class="profile-btn"></div>
+    </header>
 
-        <!-- Video Stream for Camera -->
-        <div id="scanner-container">
-            <video id="camera-stream" autoplay playsinline></video>
-        </div>
-        <p id="scanned-data">Scanned Data: None</p>
-    </main> 
+    <!-- 🏠 Main Sections -->
+    <main>
+      <section id="home" class="content-section active">
+        <div class="content-wrapper">
+          <div class="slogan">"Wake Up to Innovation"</div>
+          <div class="subtext">Experience the Future with WakeWear</div>
+          <a href="buy.html" class="nav-btn pre-order">Pre Order</a>
+        </div>
+      </section>
 
-    <!-- Footer Section -->
-    <footer>
-        <p>© 2025 WakeWear</p>
-    </footer> 
+      <section id="features" class="content-section">
+        <h2>WakeWear Features</h2>
+        <p>Experience smart wake-up technology with gentle vibrations and advanced sleep tracking.</p>
+      </section>
 
-    <!-- External JavaScript -->
-    <script src="script.js"></script>
+      <section id="technology" class="content-section">
+        <h2>Advanced Technology</h2>
+        <p>WakeWear is powered by ESP32, precise sensors, and an intuitive mobile app.</p>
+      </section>
+
+      <section id="contact" class="content-section">
+        <h2>Contact Us</h2>
+        <p>Email: <a href="mailto:support@wakewear.com">support@wakewear.com</a></p>
+        <p>Phone: <a href="tel:+917078294661">+91 7078294661</a></p>
+      </section>
+    </main>
+  </div>
+
+  <!-- ⭐ JavaScript -->
+  <script>
+    "use strict";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // ⭐ Generate Starry Background
+      const starsContainer = document.querySelector(".stars");
+      const numberOfStars = 150;
+
+      for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDuration = 3 + Math.random() * 5 + "s";
+        starsContainer.appendChild(star);
+      }
+
+      // 👤 Redirect to Login Page on Profile Icon Click
+      const profileBtn = document.getElementById("profile-btn");
+      profileBtn.addEventListener("click", function () {
+        window.location.href = "login.html";
+      });
+
+      // 🔗 Navigation Smooth Scroll and Active Highlight
+      const navBtns = document.querySelectorAll("nav ul li a.nav-btn");
+      navBtns.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          if (btn.getAttribute("href").includes("buy.html")) return;
+          e.preventDefault();
+          navBtns.forEach(link => link.classList.remove("active"));
+          btn.classList.add("active");
+          const targetId = btn.getAttribute("href");
+          const targetSection = document.querySelector(targetId);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+
+      // 🌗 Time-based Background Mode
+      const currentHour = new Date().getHours();
+      if (currentHour >= 6 && currentHour < 18) {
+        document.body.classList.add("day-background");
+        document.body.classList.remove("night-background");
+      } else {
+        document.body.classList.add("night-background");
+        document.body.classList.remove("day-background");
+      }
+    });
+  </script>
 </body>
-</html> 
+</html>
