@@ -2,119 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WakeWear - Home</title>
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Main stylesheet -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DodlAx Writing Machine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jomhuria&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css" />
-  <!-- Smooth Scrolling -->
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+
   </style>
 </head>
-<body class="night-background">
-  <!-- ⭐ Star Background -->
-  <div class="stars"></div>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="Assets/Logo.svg" alt="Logo" />
+    </div>
 
-  <!-- 🌌 Page Content Wrapper -->
-  <div id="page-content">
-    <!-- 🔝 Header with Navigation -->
-    <header>
-      <h1 class="wakewear-logo">WakeWear</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html#home" class="nav-btn active">Home</a></li>
-          <li><a href="index.html#features" class="nav-btn">Features</a></li>
-          <li><a href="index.html#technology" class="nav-btn">Technology</a></li>
-          <li><a href="index.html#contact" class="nav-btn">About Us</a></li>
-          <li><a href="buy.html" class="nav-btn buy-now">Buy Now</a></li>
-        </ul>
-      </nav>
-      <!-- 👤 Profile Icon Redirect -->
-      <div id="profile-btn" class="profile-btn"></div>
-    </header>
+    <div class="nav-scroll">
+      <button class="nav-button" onclick="scrollToSection('how-it-works')">HOW IT WORKS</button>
+      <button class="nav-button" onclick="scrollToSection('tech')">TECHNOLOGY</button>
+      <button class="nav-button" onclick="scrollToSection('about')">ABOUT</button>
+      <button class="nav-button" onclick="scrollToSection('blog')">BLOG</button>
+    </div>
 
-    <!-- 🏠 Main Sections -->
-    <main>
-      <section id="home" class="content-section active">
-        <div class="content-wrapper">
-          <div class="slogan">"Wake Up to Innovation"</div>
-          <div class="subtext">Experience the Future with WakeWear</div>
-          <a href="buy.html" class="nav-btn pre-order">Pre Order</a>
-        </div>
-      </section>
+    <button class="cta-button"><span>Get Started</span></button>
+  </header>
 
-      <section id="features" class="content-section">
-        <h2>WakeWear Features</h2>
-        <p>Experience smart wake-up technology with gentle vibrations and advanced sleep tracking.</p>
-      </section>
-
-      <section id="technology" class="content-section">
-        <h2>Advanced Technology</h2>
-        <p>WakeWear is powered by ESP32, precise sensors, and an intuitive mobile app.</p>
-      </section>
-
-      <section id="contact" class="content-section">
-        <h2>Contact Us</h2>
-        <p>Email: <a href="mailto:support@wakewear.com">support@wakewear.com</a></p>
-        <p>Phone: <a href="tel:+917078294661">+91 7078294661</a></p>
-      </section>
-    </main>
+  <div class="container">
+    <section class="hero" id="hover-zone">
+      <h1>Welcome to <strong>DodlAx Writing Machine</strong></h1>
+      <p>Write smart, not hard. Your AI-powered writing assistant for productivity, learning & creativity.</p>
+      <a href="#get-started" class="btn-orange">Try Now</a>
+    </section>
   </div>
 
-  <!-- ⭐ JavaScript -->
-  <script>
-    "use strict";
+  <section id="how-it-works">
+    <h1>How DodlAx Works</h1>
 
-    document.addEventListener("DOMContentLoaded", function () {
-      // ⭐ Generate Starry Background
-      const starsContainer = document.querySelector(".stars");
-      const numberOfStars = 150;
+  <div class="steps-container">
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/upload.png" alt="Upload Design">
+      <div class="step-title">Upload or Draw Your Design</div>
+      <div class="step-desc">Choose a design from your gallery or draw directly in our web/app interface.</div>
+    </div>
 
-      for (let i = 0; i < numberOfStars; i++) {
-        const star = document.createElement("div");
-        star.classList.add("star");
-        star.style.top = Math.random() * 100 + "%";
-        star.style.left = Math.random() * 100 + "%";
-        star.style.animationDuration = 3 + Math.random() * 5 + "s";
-        starsContainer.appendChild(star);
-      }
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/pen.png" alt="Load Pen">
+      <div class="step-title">Place the Sheet & Load Pen</div>
+      <div class="step-desc">Put a blank sheet in the drawing area and insert your pen or pencil.</div>
+    </div>
 
-      // 👤 Redirect to Login Page on Profile Icon Click
-      const profileBtn = document.getElementById("profile-btn");
-      profileBtn.addEventListener("click", function () {
-        window.location.href = "login.html";
-      });
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/bluetooth.png" alt="Bluetooth">
+      <div class="step-title">Connect & Start Drawing</div>
+      <div class="step-desc">Connect via Bluetooth and hit 'Start'. DodlAx begins drawing your design with precision.</div>
+    </div>
 
-      // 🔗 Navigation Smooth Scroll and Active Highlight
-      const navBtns = document.querySelectorAll("nav ul li a.nav-btn");
-      navBtns.forEach((btn) => {
-        btn.addEventListener("click", function (e) {
-          if (btn.getAttribute("href").includes("buy.html")) return;
-          e.preventDefault();
-          navBtns.forEach(link => link.classList.remove("active"));
-          btn.classList.add("active");
-          const targetId = btn.getAttribute("href");
-          const targetSection = document.querySelector(targetId);
-          if (targetSection) {
-            targetSection.scrollIntoView({ behavior: "smooth" });
-          }
-        });
-      });
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/play--v1.png" alt="Watch Drawing">
+      <div class="step-title">Watch It in Action</div>
+      <div class="step-desc">Watch DodlAx draw live, or come back when it's done. You can pause anytime.</div>
+    </div>
+  </div>
+</div>
+</section>
 
-      // 🌗 Time-based Background Mode
-      const currentHour = new Date().getHours();
-      if (currentHour >= 6 && currentHour < 18) {
-        document.body.classList.add("day-background");
-        document.body.classList.remove("night-background");
-      } else {
-        document.body.classList.add("night-background");
-        document.body.classList.remove("day-background");
-      }
-    });
-  </script>
+<section id="tech">
+  <h1>Technology</h1>
+
+  <div class="steps-container2">
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/upload.png" alt="Upload Design">
+      <div class="step-title">Technology that Delivers Creativity</div>
+      <div class="step-desc">From sketch to doorstep—custom creations in 3 hours or less.</div>
+    </div>
+
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/pen.png" alt="Load Pen">
+      <div class="step-title">Precision Drawing Automation</div>
+      <div class="step-desc">DodlAx uses CNC-powered pen plotters to draw with unbeatable robotic accuracy on paper of any size.</div>
+    </div>
+
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/bluetooth.png" alt="Bluetooth">
+      <div class="step-title">>Upload & Go</div>
+      <div class="step-desc">Just snap, upload, and relax—your custom idea, assignment, or artwork gets transformed into reality instantly.</div>
+    </div>
+
+    <div class="step-card">
+      <img src="https://img.icons8.com/ios/100/play--v1.png" alt="Watch Drawing">
+      <div class="step-title">Delivery in 3 Hours</div>
+      <div class="step-desc">No more waiting. Whether it’s a drawing, note, or poster—get it delivered within 3 hours across Haridwar.</div>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-card">
+        <img src="https://img.icons8.com/ios/100/upload.png" alt="Upload Design">
+        <div class="step-title">Smart & Affordable</div>
+        <div class="step-desc">Top-quality robotic precision at the price of a notebook. Perfect for students, designers, and creators alike.</div>
+      </div>
+
+  </div>
+</div>
+</section>
+
 </body>
+<script src="script.js"></script>
+
 </html>
