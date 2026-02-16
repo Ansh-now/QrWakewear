@@ -1,0 +1,166 @@
+:root{
+  --bg-900: #06070a;
+  --bg-800: #07101a;
+  --glass: rgba(255,255,255,0.04);
+  --muted: #9fb0c7;
+  --accent: #00e0ff;
+  --accent-2: #00b6ff;
+  --card-blur: 8px;
+  --max-width:1180px;
+  --radius:14px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color-scheme: dark;
+  font-size:15px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg-900),var(--bg-800));-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit}
+.wrap{max-width:var(--max-width);margin:0 auto;padding:20px}
+
+/* Header */
+.site-header{position:sticky;top:8px;z-index:60;padding:8px 16px;background:linear-gradient(180deg, rgba(10,12,15,0.35), rgba(10,12,15,0.12));backdrop-filter: blur(8px);border-radius:12px;margin:8px}
+.nav-inner{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#002b36,#003646);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--accent);font-size:18px}
+.brand-text .h-title{font-weight:800}
+.brand-text .h-sub{font-size:12px;color:var(--muted)}
+.menu-btn{margin-left:auto;background:transparent;border:0;color:var(--muted);font-size:20px;padding:10px;border-radius:8px;display:block}
+.nav{display:flex;gap:12px;align-items:center;margin-left:auto}
+.nav a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:700}
+.btn-primary, .btn-outline, .btn-glow{display:inline-flex;align-items:center;gap:8px}
+.btn-outline{border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted)}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021018;padding:8px 12px;border-radius:10px;font-weight:800}
+
+/* Hero */
+.hero{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:28px 12px}
+.hero-bg{position:absolute;inset:0;z-index:0;opacity:0.25;pointer-events:none;background-image:
+  linear-gradient(transparent 40%, rgba(0,182,255,0.02) 41%),
+  radial-gradient(800px 200px at 10% 20%, rgba(0,224,255,0.06), transparent 10%),
+  radial-gradient(600px 160px at 90% 80%, rgba(0,182,255,0.04), transparent 12%);}
+.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;max-width:1100px;margin:0 auto}
+.hero-copy h1{font-size:28px;margin:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);margin-top:6px}
+.hero-ctas{display:flex;gap:12px;justify-content:center;margin-top:12px}
+.btn{cursor:pointer;border:0}
+.btn-glow{background:linear-gradient(90deg, rgba(0,224,255,0.14), rgba(0,182,255,0.12));padding:12px 18px;border-radius:12px;color:var(--accent);box-shadow:0 6px 30px rgba(0,182,255,0.08);font-weight:800;backdrop-filter: blur(6px)}
+.btn-glow:hover{transform:translateY(-4px);transition:transform .18s ease}
+/* Hero animated canvas */
+.hero-art {display:flex;align-items:center;justify-content:center}
+#heroCanvas{width:100%;max-width:380px;height:220px;border-radius:16px;background:linear-gradient(135deg,#002b36,#003646);box-shadow:0 20px 60px rgba(0,182,255,0.06);display:block}
+
+/* Header compact state for mobile when scrolling */
+.site-header.compact{padding:6px 12px;border-radius:10px;transform:translateY(-6px);transition:transform .18s ease,padding .18s ease,opacity .18s ease;opacity:0.98}
+
+/* Services carousel (mobile) */
+.services-carousel{display:block;margin-top:12px;overflow:hidden}
+.services-carousel .carousel-track{display:flex;gap:12px;padding:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.services-carousel .carousel-track .card{min-width:84%;flex:0 0 84%;scroll-snap-align:center}
+
+/* Hide desktop grid on small screens */
+@media (max-width:980px){
+  #servicesGridDesktop{display:none}
+  #servicesCarousel{display:block}
+  .ai-idea .ai-row{display:flex;gap:8px;margin-top:8px}
+  .ai-idea input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+  .ai-idea .s-sub{margin-top:8px;color:var(--muted)}
+}
+
+/* Desktop uses grid, hide mobile carousel there */
+@media (min-width:981px){
+  #servicesCarousel{display:none}
+  .ai-idea input{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:10px}
+  .ai-idea .ai-row{display:flex}
+  .cards.services-grid .card.highlight{box-shadow:0 22px 60px rgba(0,182,255,0.06);transform:translateY(0)}
+}
+
+/* Sections */
+.section{padding:36px 12px}
+.section-title{font-size:20px;margin:0 0 16px;color:var(--accent)}
+
+/* Cards / glass */
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 30px rgba(2,8,12,0.6)}
+.glass{backdrop-filter: blur(var(--card-blur));}
+
+/* Services grid */
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.service-card{padding:18px;transition:transform .18s ease, box-shadow .18s ease;cursor:pointer}
+.service-card:hover{transform:translateY(-8px);box-shadow:0 18px 50px rgba(0,182,255,0.06)}
+.service-card .icon{font-size:22px;margin-bottom:8px;color:var(--accent)}
+
+/* Steps */
+.steps{display:flex;gap:12px;flex-wrap:wrap}
+.step{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.01);padding:12px;border-radius:12px;flex:1;min-width:180px}
+.num{width:44px;height:44px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#021018}
+
+/* Upload form */
+.upload-card form{display:flex;flex-direction:column;gap:12px}
+.dropzone{display:flex;align-items:center;justify-content:center;min-height:110px;border:2px dashed rgba(255,255,255,0.04);border-radius:12px;padding:12px;cursor:pointer}
+.dropzone input{display:none}
+.dz-text{color:var(--muted)}
+.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:10px;justify-content:flex-end}
+
+/* Why grid */
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* Gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.gallery-item{overflow:hidden;border-radius:12px}
+.gallery-item img{width:100%;height:160px;object-fit:cover;transition:transform .28s ease}
+.gallery-item:hover img{transform:scale(1.08)}
+
+/* FAQ */
+.faq-card details{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.faq-card summary{cursor:pointer;font-weight:700}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.contact-grid input, .contact-grid textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.map-wrap{height:160px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+
+/* Footer */
+.site-footer{padding:18px 12px;border-top:1px solid rgba(255,255,255,0.03);margin-top:18px}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.foot-nav{display:flex;gap:12px;align-items:center}
+.sm{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#002b36,#003646);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:800}
+
+/* Toast */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:rgba(0,0,0,0.6);padding:10px 14px;border-radius:10px;color:var(--accent);display:none;z-index:999}
+
+/* Blue suggest button */
+.btn-suggest{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021018;padding:10px 14px;border-radius:10px;font-weight:800;border:0;cursor:pointer}
+.btn-suggest:hover{transform:translateY(-4px);transition:transform .18s ease}
+
+/* Rotating image box (starry / concept box) */
+.rotating-image-wrap{width:140px;height:140px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.2));border:1px solid rgba(0,182,255,0.06);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(0,182,255,0.04);backdrop-filter: blur(6px)}
+.rotating-image{width:120px;height:120px;object-fit:contain;transform-style:preserve-3d;transition:transform .12s linear}
+
+/* ensure mobile responsiveness for the new college projects section */
+@media (max-width:980px){
+  .rotating-image-wrap{width:120px;height:120px}
+  .rotating-image{width:100px;height:100px}
+  #aiQueryMain{min-width:0}
+  .faq-card{grid-template-columns:1fr}
+}
+
+/* Responsive - mobile first */
+@media (max-width:980px){
+  .services-grid{grid-template-columns:1fr 1fr}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .menu-btn{display:block}
+  .nav{display:none;position:absolute;right:18px;top:70px;background:linear-gradient(180deg, rgba(10,12,15,0.9), rgba(10,12,15,0.85));padding:12px;border-radius:12px;backdrop-filter: blur(8px)}
+  .hero-copy h1{font-size:22px}
+}
+
+/* Desktop tweaks */
+@media (min-width:981px){
+  .menu-btn{display:none}
+  .hero-inner{flex-direction:row;align-items:center;text-align:left;justify-content:space-between;padding:30px}
+  .hero-copy{max-width:560px}
+  .services-grid{grid-template-columns:repeat(4,1fr)}
+  .why-grid{grid-template-columns:repeat(4,1fr)}
+  .gallery-grid{grid-template-columns:repeat(4,1fr)}
+}
