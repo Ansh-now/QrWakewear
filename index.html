@@ -1,179 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DodlAx Writing Machine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Jomhuria&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NexLayer Lab — Precision 3D Printing in Haridwar</title>
+  <meta name="description" content="NexLayer Lab — Precision 3D printing, prototyping and custom design in Haridwar, India." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <div class="logo-container">
-      <img src="Assets/Logo.svg" alt="Logo" />
-    </div>
+  <header class="site-header" id="header">
+    <div class="nav-inner">
+      <a class="brand" href="#top">
+        <div class="logo">NXL</div>
+        <div class="brand-text">
+          <div class="h-title">NexLayer Lab</div>
+          <div class="h-sub">Haridwar • Precision 3D Printing</div>
+        </div>
+      </a>
 
-    <div class="nav-scroll">
-      <button class="nav-button" onclick="scrollToSection('how-it-works')">HOW IT WORKS</button>
-      <button class="nav-button" onclick="scrollToSection('tech')">TECHNOLOGY</button>
-      <button class="nav-button" onclick="scrollToSection('about')">ABOUT</button>
-      <button class="nav-button" onclick="scrollToSection('blog')">BLOG</button>
-    </div>
+      <button id="menuBtn" class="menu-btn" aria-label="Open menu">☰</button>
 
-    <button class="cta-button"><span>Get Started</span></button>
+      <nav class="nav" id="nav">
+        <a href="#services">Services</a>
+        <a href="#how">How it Works</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#upload" class="btn-outline">Upload</a>
+        <a href="#contact" class="btn-primary">Get Quote</a>
+      </nav>
+    </div>
   </header>
 
-  <div class="container">
-    <section class="hero" id="hover-zone">
-      <h1>Welcome to <strong>DodlAx Writing Machine</strong></h1>
-      <p>Write smart, not hard. Your AI-powered writing assistant for productivity, learning & creativity.</p>
-      <a href="#get-started" class="btn-orange">Try Now</a>
-    </section>
-  </div>
-
-  <section id="how-it-works">
-    <h1>How DodlAx Works</h1>
-
-  <div class="steps-container">
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/upload.png" alt="Upload Design">
-      <div class="step-title">Upload or Draw Your Design</div>
-      <div class="step-desc">Choose a design from your gallery or draw directly in our web/app interface.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/pen.png" alt="Load Pen">
-      <div class="step-title">Place the Sheet & Load Pen</div>
-      <div class="step-desc">Put a blank sheet in the drawing area and insert your pen or pencil.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/bluetooth.png" alt="Bluetooth">
-      <div class="step-title">Connect & Start Drawing</div>
-      <div class="step-desc">Connect via Bluetooth and hit 'Start'. DodlAx begins drawing your design with precision.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/play--v1.png" alt="Watch Drawing">
-      <div class="step-title">Watch It in Action</div>
-      <div class="step-desc">Watch DodlAx draw live, or come back when it's done. You can pause anytime.</div>
-    </div>
-  </div>
-</div>
-</section>
-
-<section id="tech">
-  <h1>Technology</h1>
-
-  <div class="steps-container">
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/upload.png" alt="Upload Design">
-      <div class="step-title">Technology that Delivers Creativity</div>
-      <div class="step-desc">From sketch to doorstep—custom creations in 3 hours or less.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/pen.png" alt="Load Pen">
-      <div class="step-title">Precision Drawing Automation</div>
-      <div class="step-desc">DodlAx uses CNC-powered pen plotters to draw with unbeatable robotic accuracy on paper of any size.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/bluetooth.png" alt="Bluetooth">
-      <div class="step-title">>Upload & Go</div>
-      <div class="step-desc">Just snap, upload, and relax—your custom idea, assignment, or artwork gets transformed into reality instantly.</div>
-    </div>
-
-    <div class="step-card">
-      <img src="https://img.icons8.com/ios/100/play--v1.png" alt="Watch Drawing">
-      <div class="step-title">Delivery in 3 Hours</div>
-      <div class="step-desc">No more waiting. Whether it’s a drawing, note, or poster—get it delivered within 3 hours across Haridwar.</div>
-    </div>
-</section>
-
-<section class="about-wrapper" id="about" >
-  <div class="about-card">
-    <h1>About DodlAx</h1>
-    <p class="tagline">Your Local CNC Drawing & Printing Partner</p>
-
-    <div class="about-content">
-      <img src="Assets/dodlax-about.jpg" alt="DodlAx Drawing Machine">
-
-      <div class="text-content">
-        <p><strong>DodlAx</strong> is a hyper-local delivery service that blends automation with creativity. We use CNC pen plotter machines to draw or print your uploaded designs — such as assignments, posters, blueprints or sketches — and deliver them within <strong>3 hours</strong> in Haridwar.</p>
-
-        <p>Whether you're a student, designer, or working professional, DodlAx helps you skip the hassle of printing or drawing manually. Just upload your design on our app, confirm your order, and sit back — we’ll do the rest.</p>
-
-        <div class="highlights">
-          <h3>Why DodlAx?</h3>
-          <ul>
-            <li>Fast & precise CNC-based drawing</li>
-            <li>Delivery within 3 hours</li>
-            <li>App-based upload system</li>
-            <li>Quality assured prints & sketches</li>
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <h1>Precision 3D Printing in Haridwar</h1>
+          <p class="lead">Upload Your Design. We Print. You Receive.</p>
+          <div class="hero-ctas">
+            <a href="#upload" class="btn btn-glow">Upload Your Design</a>
+            <a href="#upload" class="btn btn-outline">Get Instant Quote</a>
+          </div>
+          <ul class="hero-features">
+            <li>Materials: PLA · PETG · ABS</li>
+            <li>Fast Local Turnaround · Trusted Quality</li>
           </ul>
         </div>
+        <div class="hero-art">
+          <!-- Replaced static orb with responsive canvas animation -->
+          <canvas id="heroCanvas" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+      <div class="wrap">
+        <h2 class="section-title">Services</h2>
+        <!-- Desktop grid -->
+        <div class="cards services-grid" id="servicesGridDesktop">
+          <div class="card glass service-card highlight">
+            <div class="icon">🎓</div>
+            <h4>College Project Printing</h4>
+            <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
+            <div style="margin-top:12px;display:flex;justify-content:center">
+              <button id="aiBtn" class="btn-suggest">Suggest</button>
+            </div>
+          </div>
+
+          <div class="card glass service-card">
+            <div class="icon">⛭</div>
+            <h4>3D Printing</h4>
+            <p>High-precision FDM & SLA options for prototypes and parts.</p>
+          </div>
+
+          <div class="card glass service-card highlight">
+            <div class="icon">⚙️</div>
+            <h4>Prototype Development</h4>
+            <p>Fast iterations and advice to reach production-ready parts.</p>
+          </div>
+
+          <div class="card glass service-card">
+            <div class="icon">✏️</div>
+            <h4>Custom 3D Design</h4>
+            <p>Design, reverse-engineer and refine models for printability.</p>
+          </div>
+        </div>
+
+        <!-- Mobile swipe carousel fallback -->
+        <div id="servicesCarousel" class="services-carousel" aria-hidden="true">
+          <div class="carousel-track">
+            <div class="card glass service-card">
+              <div class="icon">🎓</div>
+              <h4>College Project Printing</h4>
+              <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
+              <div style="margin-top:12px;display:flex;justify-content:center">
+                <button id="aiBtnMobile" class="btn-suggest">Suggest</button>
+              </div>
+            </div>
+
+            <div class="card glass service-card">
+              <div class="icon">⛭</div>
+              <h4>3D Printing</h4>
+              <p>High-precision FDM & SLA options for prototypes and parts.</p>
+            </div>
+
+            <div class="card glass service-card">
+              <div class="icon">⚙️</div>
+              <h4>Prototype Development</h4>
+              <p>Fast iterations and advice to reach production-ready parts.</p>
+            </div>
+
+            <div class="card glass service-card">
+              <div class="icon">✏️</div>
+              <h4>Custom 3D Design</h4>
+              <p>Design, reverse-engineer and refine models for printability.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- College Projects (AI suggester moved here) -->
+    <section class="section" id="college-projects">
+      <div class="wrap narrow">
+        <h2 class="section-title">College Project Ideas</h2>
+        <div class="card glass">
+          <p class="s-sub">Describe a keyword or topic and we'll suggest printable project ideas for your coursework or prototypes.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <input id="aiQueryMain" placeholder="e.g., robotics, IoT, renewable" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+            <button id="aiBtnMain" class="btn-suggest">Suggest</button>
+          </div>
+          <div id="aiResultsMain" class="s-sub" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <h2 class="section-title">How it Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <div class="s-body"><strong>Upload</strong><div class="s-sub">STL / OBJ / 3MF</div></div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div class="s-body"><strong>We Review</strong><div class="s-sub">Estimate & confirm price</div></div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div class="s-body"><strong>Print</strong><div class="s-sub">High-precision production</div></div>
+          </div>
+          <div class="step">
+            <div class="num">4</div>
+            <div class="s-body"><strong>Deliver</strong><div class="s-sub">Local delivery in Haridwar</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload / Order -->
+    <section class="section" id="upload">
+      <div class="wrap narrow">
+        <h2 class="section-title">Upload Your Design</h2>
+        <div class="card glass upload-card">
+          <form id="orderForm" novalidate>
+            <label class="dropzone" id="dropzone">
+              <input id="modelFile" name="modelFile" type="file" accept=".stl,.obj,.3mf" />
+              <div class="dz-text">
+                <strong>Drag & drop</strong> or click to choose 3D file (STL/OBJ/3MF). Max 50MB.
+              </div>
+            </label>
+
+            <div class="grid two">
+              <div>
+                <label>Material</label>
+                <select id="material" required>
+                  <option value="PLA">PLA</option>
+                  <option value="PETG">PETG</option>
+                  <option value="ABS">ABS</option>
+                </select>
+              </div>
+              <div>
+                <label>Color</label>
+                <select id="color">
+                  <option>Black</option><option>White</option><option>Red</option><option>Blue</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div>
+                <label>Quantity</label>
+                <input id="qty" type="number" min="1" value="1" required />
+              </div>
+              <div>
+                <label>Phone (optional)</label>
+                <input id="phone" type="tel" placeholder="+91" />
+              </div>
+            </div>
+
+            <label style="margin-top:10px">Attachment (image) — optional</label>
+            <input id="imgFile" type="file" accept="image/*" />
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-glow">Submit Order</button>
+              <button type="button" id="resetBtn" class="btn btn-outline">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why choose us -->
+    <section class="section" id="why">
+      <div class="wrap">
+        <h2 class="section-title">Why Choose Us</h2>
+        <div class="cards why-grid">
+          <div class="card glass">
+            <h4>Fast Turnaround</h4>
+            <p>Optimised workflow to deliver quickly without compromising quality.</p>
+          </div>
+          <div class="card glass">
+            <h4>High Precision</h4>
+            <p>Carefully tuned machines and settings for repeatable results.</p>
+          </div>
+          <div class="card glass">
+            <h4>Affordable</h4>
+            <p>Transparent pricing and student-friendly options.</p>
+          </div>
+          <div class="card glass">
+            <h4>Local Support</h4>
+            <p>In-person pickup and local knowledge of Haridwar projects.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery-grid">
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588401-1c7b1d3a3c9b?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588402-1e9f2c4f3b1c?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1593642634443-44adaa06623a?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1527831864880-46a9f1f0f8c9?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="wrap narrow">
+        <h2 class="section-title">FAQ</h2>
+        <div class="card glass faq-card" style="display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:start">
+          <div>
+            <details>
+              <summary>What file types do you accept?</summary>
+              <p>We accept STL, OBJ, and 3MF for 3D models; images (PNG/JPG) for references.</p>
+            </details>
+            <details>
+              <summary>How long does printing take?</summary>
+              <p>Small parts can be ready in 24–48 hours; larger or batches take longer—estimates provided on review.</p>
+            </details>
+            <details>
+              <summary>Can I request custom colors?</summary>
+              <p>Yes—select available filament colours or request a custom run; additional charge may apply.</p>
+            </details>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:center">
+            <div class="rotating-image-wrap">
+              <img id="rotatingImage" class="rotating-image" src="https://cdn-icons-png.flaticon.com/512/2942/2942816.png" alt="3D print concept" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="wrap narrow">
+        <h2 class="section-title">Contact</h2>
+        <div class="card glass contact-card">
+          <div class="contact-grid">
+            <div>
+              <h4>Send us a message</h4>
+              <form id="contactForm" novalidate>
+                <input id="cname" type="text" placeholder="Your name" required />
+                <input id="cemail" type="email" placeholder="Email" required />
+                <textarea id="cmsg" placeholder="Message" rows="4" required></textarea>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-glow">Send</button>
+                  <a class="btn btn-outline" href="mailto:hello@nexlayerlab.in">Email Us</a>
+                </div>
+              </form>
+            </div>
+            <div>
+              <h4>Visit Us</h4>
+              <div class="map-wrap">
+                <iframe src="https://www.google.com/maps?q=Haridwar&output=embed" loading="lazy"></iframe>
+              </div>
+              <div style="margin-top:8px">
+                <a class="whatsapp" href="https://wa.me/917078294661" target="_blank" rel="noopener">WhatsApp Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="foot-left">
+        <div class="logo sm">NXL</div>
+        <div class="s-sub">NexLayer Lab — Haridwar</div>
+      </div>
+      <div class="foot-right">
+        <nav class="foot-nav">
+          <a href="#terms">Terms</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="copyright">© <span id="year"></span> NexLayer Lab</div>
       </div>
     </div>
+  </footer>
 
-    <div class="mission-box">
-      <h2>Our Mission</h2>
-      <p>We aim to empower students and creatives with effortless access to high-quality, custom drawings — using automation to save time and enhance productivity.</p>
-    </div>
-  </div>
-</section>
+  <div id="toast" class="toast" aria-hidden="true"></div>
 
-
-
-
-
-
-
-<section id="blog">
-  <h1>Blog</h1>
-
-<section class="hero">
-  <h2>Welcome to the World of Smart Printing</h2>
-  <p>Explore how DodlAx brings Blinkit-style delivery to your designs, homework, and posters — all done with CNC precision and delivered in Haridwar within 3 hours.</p>
-</section>
-
-<section class="blog-grid">
-  <div class="blog-card">
-    <img src="https://source.unsplash.com/400x200/?drawing,design" alt="Blinkit for Drawings" />
-    <div class="content">
-      <h3>“Blinkit for Drawings?”</h3>
-      <p class="meta">June 2025 · 3 min read</p>
-      <p class="summary">DodlAx delivers printed diagrams and assignments in 3 hours. Here's how we do it...</p>
-      <a href="#" class="btn-orange">Read More</a>
-    </div>
-  </div>
-
-  <div class="blog-card">
-    <img src="https://source.unsplash.com/400x200/?printing,poster" alt="Why We Built DodlAx" />
-    <div class="content">
-      <h3>Why We Built DodlAx</h3>
-      <p class="meta">June 2025 · 4 min read</p>
-      <p class="summary">Inspired by students' and artists' local printing needs, DodlAx brings speed and automation to doorstep delivery...</p>
-      <a href="#" class="btn-orange">Read More</a>
-    </div>
-  </div>
-
-  <div class="blog-card">
-    <img src="https://source.unsplash.com/400x200/?cnc,penplotter" alt="How It Works" />
-    <div class="content">
-      <h3>How DodlAx Works</h3>
-      <p class="meta">June 2025 · 2 min read</p>
-      <p class="summary">Upload your file → We draw using a CNC pen plotter → You get delivery in 3 hrs. Simple, fast, and accurate.</p>
-      <a href="#" class="btn-orange">Read More</a>
-    </div>
-  </div>
-</section>
-
-
+  <script src="app.js"></script>
 </body>
-<script src="script.js"></script>
-
 </html>
