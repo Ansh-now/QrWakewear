@@ -1,339 +1,361 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NexLayer Lab — Precision 3D Printing in Haridwar</title>
-  <meta name="description" content="NexLayer Lab — Precision 3D printing, prototyping and custom design in Haridwar, India." />
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexLayer Lab - Premium 3D Printing in Haridwar</title>
+    <meta name="description" content="Professional 3D printing services in Haridwar. Upload your design and we'll bring your ideas to life.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <header class="site-header" id="header">
-    <div class="nav-inner">
-      <a class="brand" href="#top">
-        <div class="logo">NXL</div>
-        <div class="brand-text">
-          <div class="h-title">NexLayer Lab</div>
-          <div class="h-sub">Haridwar • Precision 3D Printing</div>
-        </div>
-      </a>
-
-      <button id="menuBtn" class="menu-btn" aria-label="Open menu">☰</button>
-
-      <nav class="nav" id="nav">
-        <a href="#services">Services</a>
-        <a href="#how">How it Works</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#upload" class="btn-outline">Upload</a>
-        <a href="#contact" class="btn-primary">Get Quote</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="top">
-    <!-- Hero -->
-    <section class="hero" id="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <h1>Precision 3D Printing in Haridwar</h1>
-          <p class="lead">Upload Your Design. We Print. You Receive.</p>
-          <div class="hero-ctas">
-            <a href="#upload" class="btn btn-glow">Upload Your Design</a>
-            <a href="#upload" class="btn btn-outline">Get Instant Quote</a>
-          </div>
-          <ul class="hero-features">
-            <li>Materials: PLA · PETG · ABS</li>
-            <li>Fast Local Turnaround · Trusted Quality</li>
-          </ul>
-        </div>
-        <div class="hero-art">
-          <!-- Replaced static orb with responsive canvas animation -->
-          <canvas id="heroCanvas" aria-hidden="true"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services -->
-    <section class="section" id="services">
-      <div class="wrap">
-        <h2 class="section-title">Services</h2>
-        <!-- Desktop grid -->
-        <div class="cards services-grid" id="servicesGridDesktop">
-          <div class="card glass service-card highlight">
-            <div class="icon">🎓</div>
-            <h4>College Project Printing</h4>
-            <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
-            <div style="margin-top:12px;display:flex;justify-content:center">
-              <button id="aiBtn" class="btn-suggest">Suggest</button>
+    <!-- Fixed Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <h1 class="logo-text">Nex<span class="text-brand">Layer</span> Lab</h1>
             </div>
-          </div>
-
-          <div class="card glass service-card">
-            <div class="icon">⛭</div>
-            <h4>3D Printing</h4>
-            <p>High-precision FDM & SLA options for prototypes and parts.</p>
-          </div>
-
-          <div class="card glass service-card highlight">
-            <div class="icon">⚙️</div>
-            <h4>Prototype Development</h4>
-            <p>Fast iterations and advice to reach production-ready parts.</p>
-          </div>
-
-          <div class="card glass service-card">
-            <div class="icon">✏️</div>
-            <h4>Custom 3D Design</h4>
-            <p>Design, reverse-engineer and refine models for printability.</p>
-          </div>
-        </div>
-
-        <!-- Mobile swipe carousel fallback -->
-        <div id="servicesCarousel" class="services-carousel" aria-hidden="true">
-          <div class="carousel-track">
-            <div class="card glass service-card">
-              <div class="icon">🎓</div>
-              <h4>College Project Printing</h4>
-              <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
-              <div style="margin-top:12px;display:flex;justify-content:center">
-                <button id="aiBtnMobile" class="btn-suggest">Suggest</button>
-              </div>
+            
+            <div class="navbar-links" id="navbarLinks">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#catalog" class="nav-link">Catalog</a>
+                <a href="#custom-order" class="nav-link">Custom Order</a>
+                <a href="#dashboard" class="nav-link">Dashboard</a>
             </div>
-
-            <div class="card glass service-card">
-              <div class="icon">⛭</div>
-              <h4>3D Printing</h4>
-              <p>High-precision FDM & SLA options for prototypes and parts.</p>
+            
+            <div class="navbar-actions">
+                <a href="#custom-order" class="btn-primary">Get Started</a>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i data-lucide="menu"></i>
+                </button>
             </div>
-
-            <div class="card glass service-card">
-              <div class="icon">⚙️</div>
-              <h4>Prototype Development</h4>
-              <p>Fast iterations and advice to reach production-ready parts.</p>
-            </div>
-
-            <div class="card glass service-card">
-              <div class="icon">✏️</div>
-              <h4>Custom 3D Design</h4>
-              <p>Design, reverse-engineer and refine models for printability.</p>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
-
-    <!-- College Projects (AI suggester moved here) -->
-    <section class="section" id="college-projects">
-      <div class="wrap narrow">
-        <h2 class="section-title">College Project Ideas</h2>
-        <div class="card glass">
-          <p class="s-sub">Describe a keyword or topic and we'll suggest printable project ideas for your coursework or prototypes.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-            <input id="aiQueryMain" placeholder="e.g., robotics, IoT, renewable" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
-            <button id="aiBtnMain" class="btn-suggest">Suggest</button>
-          </div>
-          <div id="aiResultsMain" class="s-sub" style="margin-top:12px"></div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#home" class="mobile-nav-link">Home</a>
+            <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="#catalog" class="mobile-nav-link">Catalog</a>
+            <a href="#custom-order" class="mobile-nav-link">Custom Order</a>
+            <a href="#dashboard" class="mobile-nav-link">Dashboard</a>
         </div>
-      </div>
-    </section>
+    </nav>
 
-    <!-- How it works -->
-    <section class="section" id="how">
-      <div class="wrap">
-        <h2 class="section-title">How it Works</h2>
-        <div class="steps">
-          <div class="step">
-            <div class="num">1</div>
-            <div class="s-body"><strong>Upload</strong><div class="s-sub">STL / OBJ / 3MF</div></div>
-          </div>
-          <div class="step">
-            <div class="num">2</div>
-            <div class="s-body"><strong>We Review</strong><div class="s-sub">Estimate & confirm price</div></div>
-          </div>
-          <div class="step">
-            <div class="num">3</div>
-            <div class="s-body"><strong>Print</strong><div class="s-sub">High-precision production</div></div>
-          </div>
-          <div class="step">
-            <div class="num">4</div>
-            <div class="s-body"><strong>Deliver</strong><div class="s-sub">Local delivery in Haridwar</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Upload / Order -->
-    <section class="section" id="upload">
-      <div class="wrap narrow">
-        <h2 class="section-title">Upload Your Design</h2>
-        <div class="card glass upload-card">
-          <form id="orderForm" novalidate>
-            <label class="dropzone" id="dropzone">
-              <input id="modelFile" name="modelFile" type="file" accept=".stl,.obj,.3mf" />
-              <div class="dz-text">
-                <strong>Drag & drop</strong> or click to choose 3D file (STL/OBJ/3MF). Max 50MB.
-              </div>
-            </label>
-
-            <div class="grid two">
-              <div>
-                <label>Material</label>
-                <select id="material" required>
-                  <option value="PLA">PLA</option>
-                  <option value="PETG">PETG</option>
-                  <option value="ABS">ABS</option>
-                </select>
-              </div>
-              <div>
-                <label>Color</label>
-                <select id="color">
-                  <option>Black</option><option>White</option><option>Red</option><option>Blue</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid two">
-              <div>
-                <label>Quantity</label>
-                <input id="qty" type="number" min="1" value="1" required />
-              </div>
-              <div>
-                <label>Phone (optional)</label>
-                <input id="phone" type="tel" placeholder="+91" />
-              </div>
-            </div>
-
-            <label style="margin-top:10px">Attachment (image) — optional</label>
-            <input id="imgFile" type="file" accept="image/*" />
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-glow">Submit Order</button>
-              <button type="button" id="resetBtn" class="btn btn-outline">Reset</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why choose us -->
-    <section class="section" id="why">
-      <div class="wrap">
-        <h2 class="section-title">Why Choose Us</h2>
-        <div class="cards why-grid">
-          <div class="card glass">
-            <h4>Fast Turnaround</h4>
-            <p>Optimised workflow to deliver quickly without compromising quality.</p>
-          </div>
-          <div class="card glass">
-            <h4>High Precision</h4>
-            <p>Carefully tuned machines and settings for repeatable results.</p>
-          </div>
-          <div class="card glass">
-            <h4>Affordable</h4>
-            <p>Transparent pricing and student-friendly options.</p>
-          </div>
-          <div class="card glass">
-            <h4>Local Support</h4>
-            <p>In-person pickup and local knowledge of Haridwar projects.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="section" id="gallery">
-      <div class="wrap">
-        <h2 class="section-title">Gallery</h2>
-        <div class="gallery-grid">
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588401-1c7b1d3a3c9b?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588402-1e9f2c4f3b1c?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1593642634443-44adaa06623a?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1527831864880-46a9f1f0f8c9?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq">
-      <div class="wrap narrow">
-        <h2 class="section-title">FAQ</h2>
-        <div class="card glass faq-card" style="display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:start">
-          <div>
-            <details>
-              <summary>What file types do you accept?</summary>
-              <p>We accept STL, OBJ, and 3MF for 3D models; images (PNG/JPG) for references.</p>
-            </details>
-            <details>
-              <summary>How long does printing take?</summary>
-              <p>Small parts can be ready in 24–48 hours; larger or batches take longer—estimates provided on review.</p>
-            </details>
-            <details>
-              <summary>Can I request custom colors?</summary>
-              <p>Yes—select available filament colours or request a custom run; additional charge may apply.</p>
-            </details>
-          </div>
-
-          <div style="display:flex;align-items:center;justify-content:center">
-            <div class="rotating-image-wrap">
-              <img id="rotatingImage" class="rotating-image" src="https://cdn-icons-png.flaticon.com/512/2942/2942816.png" alt="3D print concept" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="wrap narrow">
-        <h2 class="section-title">Contact</h2>
-        <div class="card glass contact-card">
-          <div class="contact-grid">
-            <div>
-              <h4>Send us a message</h4>
-              <form id="contactForm" novalidate>
-                <input id="cname" type="text" placeholder="Your name" required />
-                <input id="cemail" type="email" placeholder="Email" required />
-                <textarea id="cmsg" placeholder="Message" rows="4" required></textarea>
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-glow">Send</button>
-                  <a class="btn btn-outline" href="mailto:hello@nexlayerlab.in">Email Us</a>
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Precision 3D Printing in <span class="text-brand">Haridwar</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Upload Your Design. We Build Your Ideas.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#custom-order" class="btn-primary">
+                        <i data-lucide="upload"></i>
+                        Upload Your Design
+                    </a>
+                    <a href="#catalog" class="btn-secondary">
+                        <i data-lucide="package"></i>
+                        Explore Catalog
+                    </a>
                 </div>
-              </form>
             </div>
-            <div>
-              <h4>Visit Us</h4>
-              <div class="map-wrap">
-                <iframe src="https://www.google.com/maps?q=Haridwar&output=embed" loading="lazy"></iframe>
-              </div>
-              <div style="margin-top:8px">
-                <a class="whatsapp" href="https://wa.me/917078294661" target="_blank" rel="noopener">WhatsApp Us</a>
-              </div>
+            
+            <div class="hero-image-container">
+                <div class="hero-image" id="heroImage">
+                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800" alt="3D Printing">
+                    <div class="hero-image-glow"></div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+        </div>
     </section>
-  </main>
 
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <div class="foot-left">
-        <div class="logo sm">NXL</div>
-        <div class="s-sub">NexLayer Lab — Haridwar</div>
-      </div>
-      <div class="foot-right">
-        <nav class="foot-nav">
-          <a href="#terms">Terms</a>
-          <a href="#privacy">Privacy</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <div class="copyright">© <span id="year"></span> NexLayer Lab</div>
-      </div>
+    <!-- Project Suggestion Section -->
+    <section id="projects" class="project-section">
+        <div class="glass-card project-card">
+            <div class="card-header" id="projectCardHeader">
+                <div class="flex-center-gap">
+                    <div class="icon-glow">
+                        <i data-lucide="lightbulb"></i>
+                    </div>
+                    <h2 class="section-title">College Project Assistance</h2>
+                </div>
+                <i data-lucide="chevron-down" id="projectChevron"></i>
+            </div>
+            
+            <div class="card-content" id="projectContent" style="display: none;">
+                <p class="text-secondary mb-4">
+                    Need help with your college project? Enter keywords like "robotics", "IoT", "mechanical", etc.
+                </p>
+                
+                <div class="suggestion-input-group">
+                    <input type="text" id="projectKeyword" placeholder="e.g., robotics, IoT, mechanical..." class="dark-input">
+                    <button class="btn-primary" id="suggestBtn">Suggest Me a Project</button>
+                </div>
+                
+                <div id="suggestionsContainer" style="display: none;">
+                    <h3 class="suggestions-title">Project Ideas for You:</h3>
+                    <div id="suggestionsList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="catalog-section">
+        <div class="section-header">
+            <h2 class="section-title-large">Product Catalog</h2>
+            <p class="section-subtitle">Customize and order from our collection</p>
+        </div>
+        
+        <div class="catalog-grid" id="catalogGrid"></div>
+    </section>
+
+    <!-- Custom Order Section -->
+    <section id="custom-order" class="custom-order-section">
+        <div class="section-header">
+            <h2 class="section-title-large">Custom Design Order</h2>
+            <p class="section-subtitle">Upload your 3D design files and we'll bring them to life</p>
+        </div>
+        
+        <div class="glass-card order-card">
+            <div class="order-form">
+                <!-- File Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" multiple accept=".stl,.obj,.3mf,.png,.jpg,.jpeg" style="display: none;">
+                    <label for="fileInput" class="upload-label">
+                        <i data-lucide="upload" class="upload-icon"></i>
+                        <p class="upload-text">
+                            Drag & drop your files here or <span class="text-brand">browse</span>
+                        </p>
+                        <p class="upload-subtext">
+                            Supports: STL, OBJ, 3MF, PNG, JPG (Max 50MB each)
+                        </p>
+                    </label>
+                </div>
+                
+                <!-- Uploaded Files -->
+                <div id="uploadedFiles" style="display: none;">
+                    <h4 class="files-title">Uploaded Files (<span id="fileCount">0</span>)</h4>
+                    <div id="filesList"></div>
+                </div>
+                
+                <!-- Order Form -->
+                <div class="order-details-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Material</label>
+                            <select id="orderMaterial" class="dark-select">
+                                <option value="pla">PLA (Polylactic Acid)</option>
+                                <option value="petg">PETG (Polyethylene Terephthalate)</option>
+                                <option value="abs">ABS (Acrylonitrile Butadiene Styrene)</option>
+                                <option value="tpu">TPU (Flexible)</option>
+                                <option value="nylon">Nylon</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Color</label>
+                            <select id="orderColor" class="dark-select">
+                                <option value="black">Black</option>
+                                <option value="white">White</option>
+                                <option value="red">Red</option>
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="cyan">Cyan</option>
+                                <option value="orange">Orange</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" id="orderQuantity" min="1" value="1" class="dark-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Additional Notes</label>
+                        <textarea id="orderNotes" placeholder="Any special requirements or instructions..." class="dark-textarea" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="order-info-box">
+                        <i data-lucide="alert-circle"></i>
+                        <p class="info-text">
+                            Our team will review your design and send you a quote within 24 hours via WhatsApp.
+                        </p>
+                    </div>
+                    
+                    <button class="btn-primary w-full" id="submitOrderBtn" disabled>Submit Order</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="section-header">
+            <h2 class="section-title-large">Order Dashboard</h2>
+            <p class="section-subtitle">Track your 3D printing orders</p>
+        </div>
+        
+        <div id="dashboardContent"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">NexLayer Lab</h3>
+                <p class="footer-text">
+                    Premium 3D printing services in Haridwar. Turning your ideas into reality with precision and care.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-subtitle">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#catalog">Catalog</a></li>
+                    <li><a href="#custom-order">Custom Order</a></li>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-subtitle">Contact Us</h4>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i data-lucide="map-pin"></i>
+                        <span>Haridwar, India</span>
+                    </div>
+                    <div class="contact-item">
+                        <i data-lucide="phone"></i>
+                        <span>+91 7078294661</span>
+                    </div>
+                    <div class="contact-item">
+                        <i data-lucide="mail"></i>
+                        <span>contact@nexlayerlab.in</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 NexLayer Lab. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/917078294661?text=Hi%20NexLayer%20Lab!%20I%20want%20to%20know%20more%20about%20your%203D%20printing%20services." 
+       class="whatsapp-float" target="_blank" rel="noopener">
+        <i data-lucide="message-circle"></i>
+    </a>
+
+    <!-- Customization Modal -->
+    <div id="customizeModal" class="modal">
+        <div class="modal-content glass-modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Customize Product</h2>
+                <button class="modal-close" id="modalClose">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Custom Text</label>
+                    <input type="text" id="customText" placeholder="Enter your text..." class="dark-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>Size</label>
+                    <select id="customSize" class="dark-select">
+                        <option value="small">Small (5x5 cm) - ₹0</option>
+                        <option value="medium" selected>Medium (10x10 cm) - ₹100</option>
+                        <option value="large">Large (15x15 cm) - ₹200</option>
+                        <option value="xlarge">Extra Large (20x20 cm) - ₹300</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Color</label>
+                    <select id="customColor" class="dark-select">
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="cyan">Cyan</option>
+                        <option value="orange">Orange</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Material</label>
+                    <select id="customMaterial" class="dark-select">
+                        <option value="pla">PLA - ₹0</option>
+                        <option value="petg">PETG - ₹50</option>
+                        <option value="abs">ABS - ₹75</option>
+                        <option value="tpu">TPU - ₹100</option>
+                        <option value="nylon">Nylon - ₹150</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="customQuantity" min="1" value="1" class="dark-input">
+                </div>
+                
+                <!-- Preview -->
+                <div class="preview-section">
+                    <h4 class="preview-title">Preview</h4>
+                    <div class="preview-box">
+                        <p class="preview-text" id="previewText">Your text here</p>
+                        <div class="preview-details">
+                            <span id="previewSize">Size: Medium</span>
+                            <span id="previewColor">Color: Black</span>
+                            <span id="previewMaterial">Material: PLA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <div class="total-price">
+                        <span>Total:</span>
+                        <span class="price-value" id="totalPrice">₹199</span>
+                    </div>
+                    <button class="btn-primary" id="placeOrderBtn">Place Order</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
 
-  <div id="toast" class="toast" aria-hidden="true"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
-  <script src="app.js"></script>
+    <!-- Script -->
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>
