@@ -1,339 +1,264 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NexLayer Lab — Precision 3D Printing in Haridwar</title>
-  <meta name="description" content="NexLayer Lab — Precision 3D printing, prototyping and custom design in Haridwar, India." />
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - NexLayer Lab</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .admin-container { max-width: 1300px; margin: 40px auto; padding: 0 20px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: rgba(18,18,18,0.8);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-number { font-size: 32px; font-weight: 700; color: var(--brand-primary); }
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .filter-tab {
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-tab.active {
+            background: var(--brand-primary);
+            color: #000;
+            font-weight: 600;
+        }
+        .order-card-admin {
+            background: rgba(18,18,18,0.8);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <header class="site-header" id="header">
-    <div class="nav-inner">
-      <a class="brand" href="#top">
-        <div class="logo">NXL</div>
-        <div class="brand-text">
-          <div class="h-title">NexLayer Lab</div>
-          <div class="h-sub">Haridwar • Precision 3D Printing</div>
+
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <h1 class="logo-text">Nex<span class="text-brand">Layer</span> <span style="font-size:18px;">ADMIN PANEL</span></h1>
+            </div>
+            <button id="logoutBtn" class="btn-secondary">Logout</button>
         </div>
-      </a>
+    </nav>
 
-      <button id="menuBtn" class="menu-btn" aria-label="Open menu">☰</button>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>All Orders <span id="totalCount" style="font-size:20px;color:var(--text-muted);"></span></h1>
+            <button onclick="refreshAdmin()" class="btn-primary">
+                <i data-lucide="refresh-cw"></i> Refresh
+            </button>
+        </div>
 
-      <nav class="nav" id="nav">
-        <a href="#services">Services</a>
-        <a href="#how">How it Works</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#upload" class="btn-outline">Upload</a>
-        <a href="#contact" class="btn-primary">Get Quote</a>
-      </nav>
+        <!-- Statistics -->
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <!-- Search -->
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search by Order ID or User ID..." onkeyup="filterOrders()">
+
+        <!-- Filters -->
+        <div class="filter-tabs" id="filterTabs">
+            <div class="filter-tab active" data-filter="all" onclick="setFilter('all')">All</div>
+            <div class="filter-tab" data-filter="pending" onclick="setFilter('pending')">Pending</div>
+            <div class="filter-tab" data-filter="printing" onclick="setFilter('printing')">Printing</div>
+            <div class="filter-tab" data-filter="completed" onclick="setFilter('completed')">Completed</div>
+            <div class="filter-tab" data-filter="delivered" onclick="setFilter('delivered')">Delivered</div>
+        </div>
+
+        <!-- Orders List -->
+        <div id="adminOrdersList"></div>
     </div>
-  </header>
 
-  <main id="top">
-    <!-- Hero -->
-    <section class="hero" id="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <h1>Precision 3D Printing in Haridwar</h1>
-          <p class="lead">Upload Your Design. We Print. You Receive.</p>
-          <div class="hero-ctas">
-            <a href="#upload" class="btn btn-glow">Upload Your Design</a>
-            <a href="#upload" class="btn btn-outline">Get Instant Quote</a>
-          </div>
-          <ul class="hero-features">
-            <li>Materials: PLA · PETG · ABS</li>
-            <li>Fast Local Turnaround · Trusted Quality</li>
-          </ul>
-        </div>
-        <div class="hero-art">
-          <!-- Replaced static orb with responsive canvas animation -->
-          <canvas id="heroCanvas" aria-hidden="true"></canvas>
-        </div>
-      </div>
-    </section>
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
 
-    <!-- Services -->
-    <section class="section" id="services">
-      <div class="wrap">
-        <h2 class="section-title">Services</h2>
-        <!-- Desktop grid -->
-        <div class="cards services-grid" id="servicesGridDesktop">
-          <div class="card glass service-card highlight">
-            <div class="icon">🎓</div>
-            <h4>College Project Printing</h4>
-            <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
-            <div style="margin-top:12px;display:flex;justify-content:center">
-              <button id="aiBtn" class="btn-suggest">Suggest</button>
-            </div>
-          </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-          <div class="card glass service-card">
-            <div class="icon">⛭</div>
-            <h4>3D Printing</h4>
-            <p>High-precision FDM & SLA options for prototypes and parts.</p>
-          </div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqXMwAZSsKi8_LGWmnPF36Z1jyZzDVPCM",
+            authDomain: "nexlayerlab.firebaseapp.com",
+            projectId: "nexlayerlab",
+            storageBucket: "nexlayerlab.appspot.com",
+            messagingSenderId: "52859959386",
+            appId: "1:52859959386:web:c863a84e27e45a825e4063"
+        };
 
-          <div class="card glass service-card highlight">
-            <div class="icon">⚙️</div>
-            <h4>Prototype Development</h4>
-            <p>Fast iterations and advice to reach production-ready parts.</p>
-          </div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-          <div class="card glass service-card">
-            <div class="icon">✏️</div>
-            <h4>Custom 3D Design</h4>
-            <p>Design, reverse-engineer and refine models for printability.</p>
-          </div>
-        </div>
+        const ADMIN_EMAIL = "contact@nexlayerlab.in";
+        let allOrders = [];
+        let currentFilter = "all";
 
-        <!-- Mobile swipe carousel fallback -->
-        <div id="servicesCarousel" class="services-carousel" aria-hidden="true">
-          <div class="carousel-track">
-            <div class="card glass service-card">
-              <div class="icon">🎓</div>
-              <h4>College Project Printing</h4>
-              <p>Student-friendly pricing and quick turnarounds for campus projects.</p>
-              <div style="margin-top:12px;display:flex;justify-content:center">
-                <button id="aiBtnMobile" class="btn-suggest">Suggest</button>
-              </div>
-            </div>
+        onAuthStateChanged(auth, async (user) => {
+            if (!user || user.email !== ADMIN_EMAIL) {
+                alert("❌ Access Denied. Admin only.");
+                window.location.href = "index.html";
+                return;
+            }
 
-            <div class="card glass service-card">
-              <div class="icon">⛭</div>
-              <h4>3D Printing</h4>
-              <p>High-precision FDM & SLA options for prototypes and parts.</p>
-            </div>
+            document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => window.location.href = "index.html");
+            loadAdminData();
+        });
 
-            <div class="card glass service-card">
-              <div class="icon">⚙️</div>
-              <h4>Prototype Development</h4>
-              <p>Fast iterations and advice to reach production-ready parts.</p>
-            </div>
+        async function loadAdminData() {
+            const snapshot = await getDocs(collection(db, 'orders'));
+            allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderStatistics();
+            renderOrders();
+        }
 
-            <div class="card glass service-card">
-              <div class="icon">✏️</div>
-              <h4>Custom 3D Design</h4>
-              <p>Design, reverse-engineer and refine models for printability.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        function renderStatistics() {
+            const total = allOrders.length;
+            const pending = allOrders.filter(o => ['Submitted','Reviewing'].includes(o.status)).length;
+            const printing = allOrders.filter(o => o.status === 'Printing').length;
+            const completed = allOrders.filter(o => o.status === 'Completed').length;
+            const delivered = allOrders.filter(o => o.status === 'Delivered').length;
 
-    <!-- College Projects (AI suggester moved here) -->
-    <section class="section" id="college-projects">
-      <div class="wrap narrow">
-        <h2 class="section-title">College Project Ideas</h2>
-        <div class="card glass">
-          <p class="s-sub">Describe a keyword or topic and we'll suggest printable project ideas for your coursework or prototypes.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-            <input id="aiQueryMain" placeholder="e.g., robotics, IoT, renewable" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
-            <button id="aiBtnMain" class="btn-suggest">Suggest</button>
-          </div>
-          <div id="aiResultsMain" class="s-sub" style="margin-top:12px"></div>
-        </div>
-      </div>
-    </section>
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Orders</div></div>
+                <div class="stat-card"><div class="stat-number" style="color:#f59e0b;">${pending}</div><div>Pending</div></div>
+                <div class="stat-card"><div class="stat-number" style="color:#8b5cf6;">${printing}</div><div>Printing</div></div>
+                <div class="stat-card"><div class="stat-number" style="color:#22c55e;">${completed}</div><div>Completed</div></div>
+                <div class="stat-card"><div class="stat-number" style="color:#06b67f;">${delivered}</div><div>Delivered</div></div>
+            `;
+            document.getElementById('totalCount').textContent = `(${total})`;
+        }
 
-    <!-- How it works -->
-    <section class="section" id="how">
-      <div class="wrap">
-        <h2 class="section-title">How it Works</h2>
-        <div class="steps">
-          <div class="step">
-            <div class="num">1</div>
-            <div class="s-body"><strong>Upload</strong><div class="s-sub">STL / OBJ / 3MF</div></div>
-          </div>
-          <div class="step">
-            <div class="num">2</div>
-            <div class="s-body"><strong>We Review</strong><div class="s-sub">Estimate & confirm price</div></div>
-          </div>
-          <div class="step">
-            <div class="num">3</div>
-            <div class="s-body"><strong>Print</strong><div class="s-sub">High-precision production</div></div>
-          </div>
-          <div class="step">
-            <div class="num">4</div>
-            <div class="s-body"><strong>Deliver</strong><div class="s-sub">Local delivery in Haridwar</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+        function renderOrders(filteredOrders = allOrders) {
+            const container = document.getElementById('adminOrdersList');
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `<div class="glass-card" style="text-align:center;padding:80px;">No orders found</div>`;
+                return;
+            }
 
-    <!-- Upload / Order -->
-    <section class="section" id="upload">
-      <div class="wrap narrow">
-        <h2 class="section-title">Upload Your Design</h2>
-        <div class="card glass upload-card">
-          <form id="orderForm" novalidate>
-            <label class="dropzone" id="dropzone">
-              <input id="modelFile" name="modelFile" type="file" accept=".stl,.obj,.3mf" />
-              <div class="dz-text">
-                <strong>Drag & drop</strong> or click to choose 3D file (STL/OBJ/3MF). Max 50MB.
-              </div>
-            </label>
+            let html = '';
+            filteredOrders.forEach(order => {
+                html += `
+                    <div class="glass-card order-card-admin">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                            <strong style="font-size:18px;">${order.id}</strong>
+                            <span class="status-badge status-\( {(order.status || 'submitted').toLowerCase()}"> \){order.status || 'Submitted'}</span>
+                        </div>
+                        <p><strong>User ID:</strong> ${order.userId}</p>
+                        <p><strong>Date:</strong> ${new Date(order.timestamp).toLocaleString('en-IN')}</p>
+                        ${order.product ? `<p><strong>Product:</strong> ${order.product}</p>` : ''}
+                        ${order.files && order.files.length ? `<p><strong>Files:</strong> ${order.files.length} files</p>` : ''}
+                        ${order.notes ? `<p><strong>Notes:</strong> ${order.notes}</p>` : ''}
 
-            <div class="grid two">
-              <div>
-                <label>Material</label>
-                <select id="material" required>
-                  <option value="PLA">PLA</option>
-                  <option value="PETG">PETG</option>
-                  <option value="ABS">ABS</option>
-                </select>
-              </div>
-              <div>
-                <label>Color</label>
-                <select id="color">
-                  <option>Black</option><option>White</option><option>Red</option><option>Blue</option>
-                </select>
-              </div>
-            </div>
+                        <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+                            <select id="status-${order.id}" class="dark-select">
+                                <option value="Submitted" ${order.status==='Submitted'?'selected':''}>Submitted</option>
+                                <option value="Reviewing" ${order.status==='Reviewing'?'selected':''}>Reviewing</option>
+                                <option value="Printing" ${order.status==='Printing'?'selected':''}>Printing</option>
+                                <option value="Completed" ${order.status==='Completed'?'selected':''}>Completed</option>
+                                <option value="Delivered" ${order.status==='Delivered'?'selected':''}>Delivered</option>
+                            </select>
+                            <button onclick="updateAdminStatus('${order.id}')" class="btn-primary">Update Status</button>
+                            <button onclick="deleteOrder('${order.id}')" class="delete-btn">Delete Order</button>
+                        </div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
 
-            <div class="grid two">
-              <div>
-                <label>Quantity</label>
-                <input id="qty" type="number" min="1" value="1" required />
-              </div>
-              <div>
-                <label>Phone (optional)</label>
-                <input id="phone" type="tel" placeholder="+91" />
-              </div>
-            </div>
+        window.updateAdminStatus = async (orderId) => {
+            const newStatus = document.getElementById(`status-${orderId}`).value;
+            await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
+            showToast(`Order updated to ${newStatus}`);
+            loadAdminData();
+        };
 
-            <label style="margin-top:10px">Attachment (image) — optional</label>
-            <input id="imgFile" type="file" accept="image/*" />
+        window.deleteOrder = async (orderId) => {
+            if (!confirm("Delete this order permanently?")) return;
+            await deleteDoc(doc(db, 'orders', orderId));
+            showToast("Order deleted");
+            loadAdminData();
+        };
 
-            <div class="form-actions">
-              <button type="submit" class="btn btn-glow">Submit Order</button>
-              <button type="button" id="resetBtn" class="btn btn-outline">Reset</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.filter === filter);
+            });
+            filterOrders();
+        }
 
-    <!-- Why choose us -->
-    <section class="section" id="why">
-      <div class="wrap">
-        <h2 class="section-title">Why Choose Us</h2>
-        <div class="cards why-grid">
-          <div class="card glass">
-            <h4>Fast Turnaround</h4>
-            <p>Optimised workflow to deliver quickly without compromising quality.</p>
-          </div>
-          <div class="card glass">
-            <h4>High Precision</h4>
-            <p>Carefully tuned machines and settings for repeatable results.</p>
-          </div>
-          <div class="card glass">
-            <h4>Affordable</h4>
-            <p>Transparent pricing and student-friendly options.</p>
-          </div>
-          <div class="card glass">
-            <h4>Local Support</h4>
-            <p>In-person pickup and local knowledge of Haridwar projects.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+        function filterOrders() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
 
-    <!-- Gallery -->
-    <section class="section" id="gallery">
-      <div class="wrap">
-        <h2 class="section-title">Gallery</h2>
-        <div class="gallery-grid">
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588401-1c7b1d3a3c9b?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1581093588402-1e9f2c4f3b1c?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1593642634443-44adaa06623a?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1527831864880-46a9f1f0f8c9?q=80&w=800&auto=format&fit=crop" alt="sample 3d print"></div>
-        </div>
-      </div>
-    </section>
+            let filtered = allOrders;
 
-    <!-- FAQ -->
-    <section class="section" id="faq">
-      <div class="wrap narrow">
-        <h2 class="section-title">FAQ</h2>
-        <div class="card glass faq-card" style="display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:start">
-          <div>
-            <details>
-              <summary>What file types do you accept?</summary>
-              <p>We accept STL, OBJ, and 3MF for 3D models; images (PNG/JPG) for references.</p>
-            </details>
-            <details>
-              <summary>How long does printing take?</summary>
-              <p>Small parts can be ready in 24–48 hours; larger or batches take longer—estimates provided on review.</p>
-            </details>
-            <details>
-              <summary>Can I request custom colors?</summary>
-              <p>Yes—select available filament colours or request a custom run; additional charge may apply.</p>
-            </details>
-          </div>
+            // Status filter
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'pending') {
+                    filtered = filtered.filter(o => ['Submitted','Reviewing'].includes(o.status));
+                } else {
+                    filtered = filtered.filter(o => (o.status || '').toLowerCase() === currentFilter);
+                }
+            }
 
-          <div style="display:flex;align-items:center;justify-content:center">
-            <div class="rotating-image-wrap">
-              <img id="rotatingImage" class="rotating-image" src="https://cdn-icons-png.flaticon.com/512/2942/2942816.png" alt="3D print concept" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(o => 
+                    o.id.toLowerCase().includes(searchTerm) || 
+                    (o.userId || '').toLowerCase().includes(searchTerm)
+                );
+            }
 
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="wrap narrow">
-        <h2 class="section-title">Contact</h2>
-        <div class="card glass contact-card">
-          <div class="contact-grid">
-            <div>
-              <h4>Send us a message</h4>
-              <form id="contactForm" novalidate>
-                <input id="cname" type="text" placeholder="Your name" required />
-                <input id="cemail" type="email" placeholder="Email" required />
-                <textarea id="cmsg" placeholder="Message" rows="4" required></textarea>
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-glow">Send</button>
-                  <a class="btn btn-outline" href="mailto:hello@nexlayerlab.in">Email Us</a>
-                </div>
-              </form>
-            </div>
-            <div>
-              <h4>Visit Us</h4>
-              <div class="map-wrap">
-                <iframe src="https://www.google.com/maps?q=Haridwar&output=embed" loading="lazy"></iframe>
-              </div>
-              <div style="margin-top:8px">
-                <a class="whatsapp" href="https://wa.me/917078294661" target="_blank" rel="noopener">WhatsApp Us</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+            renderOrders(filtered);
+        }
 
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <div class="foot-left">
-        <div class="logo sm">NXL</div>
-        <div class="s-sub">NexLayer Lab — Haridwar</div>
-      </div>
-      <div class="foot-right">
-        <nav class="foot-nav">
-          <a href="#terms">Terms</a>
-          <a href="#privacy">Privacy</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <div class="copyright">© <span id="year"></span> NexLayer Lab</div>
-      </div>
-    </div>
-  </footer>
+        window.refreshAdmin = loadAdminData;
 
-  <div id="toast" class="toast" aria-hidden="true"></div>
-
-  <script src="app.js"></script>
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
 </body>
 </html>
