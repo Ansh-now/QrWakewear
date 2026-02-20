@@ -50,7 +50,7 @@ let currentProduct = null;
 let currentUser = null;
 let isAdmin = false;
 
-const ADMIN_EMAIL = "contact@nexlayerlab.in";   // ← Change this to your real admin email
+const ADMIN_EMAIL = "anshyadav0135@gmail.com";   // ← Change this to your real admin email
 
 const catalogProducts = [
     { id: 1, name: "Custom Name Plates", image: "https://images.unsplash.com/photo-1621261053344-51c53e2e78a1?w=500", startingPrice: 199, description: "Personalized name plates" },
