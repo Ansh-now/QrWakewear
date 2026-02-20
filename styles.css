@@ -1,6 +1,5 @@
 /* NexLayer Lab - Pure CSS Dark Theme with Glassmorphism */
 
-/* Root Variables */
 :root {
     --bg-primary: #000000;
     --bg-secondary: #121212;
@@ -1192,4 +1191,14 @@ section {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--brand-primary);
+}
+
+/* Preview Canvas - IMPORTANT FOR 3D PREVIEW */
+.file-preview {
+    width: 100%;
+    height: 220px;
+    margin-top: 10px;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
 }
