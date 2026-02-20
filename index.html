@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +13,1224 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* NexLayer Lab - Pure CSS Dark Theme with Glassmorphism */
+
+        /* Root Variables */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #121212;
+            --bg-overlay: rgba(255, 255, 255, 0.1);
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --text-muted: #4D4D4D;
+            
+            --border-subtle: rgba(255, 255, 255, 0.25);
+            --border-medium: rgba(255, 255, 255, 0.4);
+            
+            --brand-primary: #00FFD1;
+            --brand-hover: rgba(0, 255, 209, 0.1);
+            --brand-active: #6FD2C0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .text-brand {
+            color: var(--brand-primary);
+        }
+
+        /* Utility Classes */
+        .flex-center-gap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--brand-primary);
+            color: #000000;
+            border: none;
+            border-radius: 0px;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease-in-out;
+            min-height: 56px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            line-height: 1.2;
+        }
+
+        .btn-primary:hover {
+            background: var(--brand-hover);
+            color: var(--brand-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 209, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0px;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease-in-out;
+            min-height: 56px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+
+        .btn-whatsapp {
+            background: rgba(37, 211, 102, 0.2);
+            color: #25D366;
+            border: 1px solid #25D366;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp:hover {
+            background: #25D366;
+            color: #000000;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 255, 209, 0.1);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 7.6923%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .mobile-nav.active {
+            display: flex;
+        }
+
+        .mobile-nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 400;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 7.6923%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title-large {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 66px;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.62px;
+            margin-bottom: 24px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            transition: transform 0.1s ease-out;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .hero-image-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(0, 255, 209, 0.3) 0%, transparent 70%);
+            filter: blur(60px);
+            z-index: -1;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scroll-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--brand-primary), transparent);
+            animation: scroll-down 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-down {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(20px); opacity: 0; }
+        }
+
+        /* Project Section */
+        .project-section {
+            padding: 100px 7.6923%;
+        }
+
+        .project-card {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .icon-glow {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        .card-content {
+            margin-top: 24px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .suggestion-input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .suggestions-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--brand-primary);
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--border-medium);
+        }
+
+        .suggestion-text {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .suggestion-number {
+            font-weight: 600;
+            color: var(--brand-primary);
+        }
+
+        /* Catalog Section */
+        .catalog-section {
+            padding: 100px 7.6923%;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .catalog-card {
+            overflow: hidden;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .catalog-image {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .catalog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .catalog-card:hover .catalog-image img {
+            transform: scale(1.05);
+        }
+
+        .catalog-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .catalog-card:hover .catalog-overlay {
+            opacity: 1;
+        }
+
+        .catalog-info {
+            padding: 24px;
+        }
+
+        .catalog-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .catalog-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .catalog-price {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--brand-primary);
+        }
+
+        /* Custom Order Section */
+        .custom-order-section {
+            padding: 100px 7.6923%;
+        }
+
+        .order-card {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .order-form {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-subtle);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-active {
+            border-color: var(--brand-primary);
+            background: rgba(0, 255, 209, 0.05);
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--brand-primary);
+        }
+
+        .upload-text {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        #uploadedFiles {
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+        }
+
+        .files-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--brand-primary);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .file-size {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .remove-file-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            padding: 4px;
+            transition: opacity 0.3s ease;
+        }
+
+        .remove-file-btn:hover {
+            opacity: 0.7;
+        }
+
+        .order-details-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .order-info-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 255, 209, 0.1);
+            border: 1px solid var(--brand-primary);
+            border-radius: 8px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 100px 7.6923%;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            color: var(--text-muted);
+            margin: 0 auto 24px;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .order-card-item {
+            padding: 24px;
+        }
+
+        .order-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .order-id-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-id {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .order-date {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-submitted {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60A5FA;
+        }
+
+        .status-reviewing {
+            background: rgba(234, 179, 8, 0.2);
+            color: #FBBF24;
+        }
+
+        .status-printing {
+            background: rgba(168, 85, 247, 0.2);
+            color: #C084FC;
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ADE80;
+        }
+
+        .status-delivered {
+            background: rgba(6, 182, 212, 0.2);
+            color: #22D3EE;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .order-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .detail-value.price {
+            color: var(--brand-primary);
+            font-size: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--brand-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .preview-section {
+            margin: 24px 0;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+        }
+
+        .preview-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .preview-box {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .preview-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--brand-primary);
+            margin-bottom: 12px;
+        }
+
+        .preview-details {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .total-price {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-value {
+            color: var(--brand-primary);
+        }
+
+        /* Input Styles */
+        .dark-input,
+        .dark-textarea,
+        .dark-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .dark-input:focus,
+        .dark-textarea:focus,
+        .dark-select:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 255, 209, 0.1);
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-subtle);
+            padding: 60px 7.6923% 20px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--brand-primary);
+        }
+
+        .footer-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--brand-primary);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-float svg {
+            color: #000000;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 300;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4ADE80;
+        }
+
+        .toast.error {
+            border-left: 4px solid #FF4444;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 20px;
+            }
+
+            .navbar-content {
+                padding: 0 20px;
+            }
+
+            .navbar-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .section-title-large {
+                font-size: 36px;
+            }
+
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .suggestion-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .suggestion-input-group {
+                flex-direction: column;
+            }
+
+            .preview-details {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-primary);
+        }
+
+        /* Preview Canvas */
+        .file-preview {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+        }
+    </style>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js for 3D previews -->
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@latest/build/three.module.js';
+        import { STLLoader } from 'https://unpkg.com/three@latest/examples/jsm/loaders/STLLoader.js';
+        import { OBJLoader } from 'https://unpkg.com/three@latest/examples/jsm/loaders/OBJLoader.js';
+        // Make them global for script
+        window.THREE = THREE;
+        window.STLLoader = STLLoader;
+        window.OBJLoader = OBJLoader;
+    </script>
 </head>
 <body>
     <!-- Fixed Navbar -->
@@ -35,6 +1250,9 @@
             
             <div class="navbar-actions">
                 <a href="#custom-order" class="btn-primary">Get Started</a>
+                <span id="userGreeting" style="display: none;">Hello, <span id="userEmail"></span></span>
+                <button id="logoutBtn" class="btn-secondary" style="display: none;">Logout</button>
+                <button id="loginBtn" class="btn-secondary">Login</button>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
                     <i data-lucide="menu"></i>
                 </button>
@@ -313,9 +1531,7 @@
                     <select id="customMaterial" class="dark-select">
                         <option value="pla">PLA - ₹0</option>
                         <option value="petg">PETG - ₹50</option>
-                        <option value="abs">ABS - ₹75</option>
                         <option value="tpu">TPU - ₹100</option>
-                        <option value="nylon">Nylon - ₹150</option>
                     </select>
                 </div>
                 
@@ -348,14 +1564,744 @@
         </div>
     </div>
 
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content glass-modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="authTitle">Login</h2>
+                <button class="modal-close" id="authClose">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="authEmail" class="dark-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPassword" class="dark-input">
+                </div>
+                
+                <button class="btn-primary w-full" id="authBtn">Login</button>
+                <p class="text-center mt-4">Don't have an account? <span class="text-brand cursor-pointer" id="toggleAuth">Sign Up</span></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
     <!-- Script -->
-    <script src="script.js"></script>
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
+        // Firebase config
+        const firebaseConfig = {
+          apiKey: "AIzaSyBqXMwAZSsKi8_LGWmnPF36Z1jyZzDVPCM",
+          authDomain: "nexlayerlab.firebaseapp.com",
+          projectId: "nexlayerlab",
+          storageBucket: "nexlayerlab.appspot.com",
+          messagingSenderId: "52859959386",
+          appId: "1:52859959386:web:c863a84e27e45a825e4063",
+          measurementId: "G-K9D5YVQ8L8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Mock Data for catalog (kept hardcoded)
+        const catalogProducts = [
+            {
+                id: 1,
+                name: "Custom Name Plates",
+                category: "Name Plates",
+                image: "https://images.unsplash.com/photo-1621261053344-51c53e2e78a1?w=500",
+                startingPrice: 199,
+                description: "Personalized name plates for homes and offices"
+            },
+            // ... (keep the rest as is)
+        ];
+
+        // Materials and sizes (kept as is)
+        const materials = [
+            { value: "pla", label: "PLA", price: 0 },
+            // ... 
+        ];
+
+        const sizes = [
+            { value: "small", label: "Small (5x5 cm)", price: 0 },
+            // ...
+        ];
+
+        // State
+        let uploadedFiles = [];
+        let currentProduct = null;
+        let isAdmin = false;
+        let currentUser = null;
+
+        // Utility Functions
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Auth Functions
+        function toggleAuthMode() {
+            const isSignup = document.getElementById('authTitle').textContent === 'Sign Up';
+            document.getElementById('authTitle').textContent = isSignup ? 'Login' : 'Sign Up';
+            document.getElementById('authBtn').textContent = isSignup ? 'Login' : 'Sign Up';
+            document.getElementById('toggleAuth').textContent = isSignup ? 'Sign Up' : 'Login';
+        }
+
+        function handleAuth() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const isSignup = document.getElementById('authBtn').textContent === 'Sign Up';
+
+            if (isSignup) {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(userCredential => {
+                        showToast('Signed up successfully!');
+                        document.getElementById('authModal').classList.remove('active');
+                    })
+                    .catch(error => showToast(error.message, 'error'));
+            } else {
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(userCredential => {
+                        showToast('Logged in successfully!');
+                        document.getElementById('authModal').classList.remove('active');
+                    })
+                    .catch(error => showToast(error.message, 'error'));
+            }
+        }
+
+        function logout() {
+            signOut(auth)
+                .then(() => showToast('Logged out!'))
+                .catch(error => showToast(error.message, 'error'));
+        }
+
+        // Update UI on auth change
+        onAuthStateChanged(auth, user => {
+            currentUser = user;
+            isAdmin = user && user.email === 'contact@nexlayerlab.in'; // Hardcoded admin email
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-flex';
+                document.getElementById('userGreeting').style.display = 'inline';
+                document.getElementById('userEmail').textContent = user.email.split('@')[0];
+                loadDashboard();
+            } else {
+                document.getElementById('loginBtn').style.display = 'inline-flex';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('userGreeting').style.display = 'none';
+                loadDashboard(); // Show empty or prompt login
+            }
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileNav').classList.remove('active');
+            });
+        });
+
+        // Hero Image Scroll Animation
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const heroImage = document.getElementById('heroImage');
+            
+            if (heroImage) {
+                const scale = Math.max(0.7, 1 - scrollY / 1000);
+                const translateY = Math.min(scrollY / 2, 200);
+                heroImage.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+            }
+        });
+
+        // Project Suggestion Toggle
+        document.getElementById('projectCardHeader').addEventListener('click', () => {
+            const content = document.getElementById('projectContent');
+            const chevron = document.getElementById('projectChevron');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                chevron.setAttribute('data-lucide', 'chevron-up');
+            } else {
+                content.style.display = 'none';
+                chevron.setAttribute('data-lucide', 'chevron-down');
+            }
+            lucide.createIcons();
+        });
+
+        // Project Suggestion Logic with AI
+        document.getElementById('suggestBtn').addEventListener('click', async () => {
+            const keyword = document.getElementById('projectKeyword').value.toLowerCase().trim();
+            
+            if (!keyword) {
+                showToast('Please enter a keyword', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`https://text.pollinations.ai/Generate 5 college level project ideas related to ${keyword}`);
+                const text = await response.text();
+                const suggestions = text.split('\n').filter(line => line.trim()).slice(0, 5); // Simple parse
+                
+                // Display suggestions
+                const container = document.getElementById('suggestionsContainer');
+                const list = document.getElementById('suggestionsList');
+                
+                list.innerHTML = suggestions.map((suggestion, index) => `
+                    <div class="suggestion-item">
+                        <div class="suggestion-text">
+                            <span class="suggestion-number">${index + 1}.</span>
+                            ${suggestion}
+                        </div>
+                        <button class="btn-whatsapp" onclick="contactWhatsApp('${suggestion.replace(/'/g, "\\'")}')">
+                            <i data-lucide="message-circle"></i>
+                            Discuss on WhatsApp
+                        </button>
+                    </div>
+                `).join('');
+                
+                container.style.display = 'block';
+                lucide.createIcons();
+            } catch (error) {
+                showToast('Failed to generate suggestions', 'error');
+            }
+        });
+
+        function contactWhatsApp(project) {
+            const message = encodeURIComponent(`Hi NexLayer Lab! I'm interested in the project: "${project}". Can you help me with 3D printing components?`);
+            window.open(`https://wa.me/917078294661?text=${message}`, '_blank');
+        }
+
+        // Load Catalog
+        function loadCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = catalogProducts.map(product => `
+                <div class="glass-card catalog-card" onclick="openCustomizeModal(${product.id})">
+                    <div class="catalog-image">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="catalog-overlay">
+                            <button class="btn-primary">
+                                <i data-lucide="edit-3"></i>
+                                Customize
+                            </button>
+                        </div>
+                    </div>
+                    <div class="catalog-info">
+                        <h3 class="catalog-title">${product.name}</h3>
+                        <p class="catalog-description">${product.description}</p>
+                        <p class="catalog-price">Starting at ₹${product.startingPrice}</p>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Open Customize Modal
+        function openCustomizeModal(productId) {
+            if (!currentUser) {
+                showToast('Please login to place orders', 'error');
+                document.getElementById('authModal').classList.add('active');
+                return;
+            }
+            currentProduct = catalogProducts.find(p => p.id === productId);
+            const modal = document.getElementById('customizeModal');
+            document.getElementById('modalTitle').textContent = `Customize ${currentProduct.name}`;
+            
+            // Reset form
+            document.getElementById('customText').value = '';
+            document.getElementById('customSize').value = 'medium';
+            document.getElementById('customColor').value = 'black';
+            document.getElementById('customMaterial').value = 'pla';
+            document.getElementById('customQuantity').value = 1;
+            
+            updatePreview();
+            calculatePrice();
+            
+            modal.classList.add('active');
+        }
+
+        // Close Modal
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('customizeModal').classList.remove('active');
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('customizeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'customizeModal') {
+                document.getElementById('customizeModal').classList.remove('active');
+            }
+        });
+
+        // Update Preview (text only, as catalog is 2D)
+        function updatePreview() {
+            const text = document.getElementById('customText').value || 'Your text here';
+            const size = document.getElementById('customSize').value;
+            const color = document.getElementById('customColor').value;
+            const material = document.getElementById('customMaterial').value;
+            
+            document.getElementById('previewText').textContent = text;
+            document.getElementById('previewSize').textContent = `Size: ${sizes.find(s => s.value === size).label}`;
+            document.getElementById('previewColor').textContent = `Color: ${color.charAt(0).toUpperCase() + color.slice(1)}`;
+            document.getElementById('previewMaterial').textContent = `Material: ${materials.find(m => m.value === material).label}`;
+        }
+
+        // Calculate Price
+        function calculatePrice() {
+            if (!currentProduct) return;
+            
+            const basePrice = currentProduct.startingPrice;
+            const sizePrice = sizes.find(s => s.value === document.getElementById('customSize').value).price;
+            const materialPrice = materials.find(m => m.value === document.getElementById('customMaterial').value).price;
+            const quantity = parseInt(document.getElementById('customQuantity').value) || 1;
+            
+            const total = (basePrice + sizePrice + materialPrice) * quantity;
+            document.getElementById('totalPrice').textContent = `₹${total}`;
+        }
+
+        // Listen to form changes
+        ['customText', 'customSize', 'customColor', 'customMaterial', 'customQuantity'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                updatePreview();
+                calculatePrice();
+            });
+        });
+
+        // Place Order from Modal
+        document.getElementById('placeOrderBtn').addEventListener('click', async () => {
+            const text = document.getElementById('customText').value.trim();
+            
+            if (!text) {
+                showToast('Please enter custom text', 'error');
+                return;
+            }
+            
+            const orderData = {
+                userId: currentUser.uid,
+                product: currentProduct.name,
+                customization: {
+                    text: text,
+                    size: document.getElementById('customSize').value,
+                    color: document.getElementById('customColor').value,
+                    material: document.getElementById('customMaterial').value,
+                    quantity: parseInt(document.getElementById('customQuantity').value)
+                },
+                totalPrice: parseInt(document.getElementById('totalPrice').textContent.replace('₹', '')),
+                timestamp: new Date().toISOString(),
+                status: 'Submitted'
+            };
+            
+            try {
+                const docRef = await addDoc(collection(db, 'orders'), orderData);
+                showToast(`Order placed! Order ID: ${docRef.id}`);
+                document.getElementById('customizeModal').classList.remove('active');
+                loadDashboard();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        // File Upload - Drag and Drop
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-active');
+        });
+
+        uploadZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-active');
+        });
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-active');
+            
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            if (!currentUser) {
+                showToast('Please login to upload files', 'error');
+                document.getElementById('authModal').classList.add('active');
+                return;
+            }
+            const validFiles = files.filter(file => {
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                return ['.stl', '.obj', '.3mf', '.png', '.jpg', '.jpeg'].includes(ext);
+            });
+            
+            uploadedFiles = [...uploadedFiles, ...validFiles];
+            displayFiles();
+            updateSubmitButton();
+        }
+
+        function displayFiles() {
+            const container = document.getElementById('uploadedFiles');
+            const list = document.getElementById('filesList');
+            
+            if (uploadedFiles.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('fileCount').textContent = uploadedFiles.length;
+            
+            list.innerHTML = uploadedFiles.map((file, index) => `
+                <div class="file-item">
+                    <i data-lucide="file-text" class="file-icon"></i>
+                    <div class="file-info">
+                        <p class="file-name">${file.name}</p>
+                        <p class="file-size">${(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                    <button class="remove-file-btn" onclick="removeFile(${index})">
+                        <i data-lucide="x"></i>
+                    </button>
+                    <div class="file-preview" id="preview-${index}"></div>
+                </div>
+            `).join('');
+            
+            container.style.display = 'block';
+            lucide.createIcons();
+            
+            // Load previews
+            uploadedFiles.forEach((file, index) => loadPreview(index, file));
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            displayFiles();
+            updateSubmitButton();
+        }
+
+        function loadPreview(index, file) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!['stl', 'obj'].includes(ext)) return; // Only for 3D files
+            
+            const container = document.getElementById(`preview-${index}`);
+            if (!container) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / 200, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, 200);
+            container.appendChild(renderer.domElement);
+            
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const contents = e.target.result;
+                let loader;
+                if (ext === 'stl') {
+                    loader = new STLLoader();
+                } else if (ext === 'obj') {
+                    loader = new OBJLoader();
+                }
+                const object = loader.parse(contents);
+                const box = new THREE.Box3().setFromObject(object);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                camera.position.copy(center);
+                camera.position.z += maxDim * 1.5;
+                camera.lookAt(center);
+                
+                object.traverse(child => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material = new THREE.MeshNormalMaterial();
+                    }
+                });
+                
+                scene.add(object);
+                renderer.render(scene, camera);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('submitOrderBtn');
+            btn.disabled = uploadedFiles.length === 0;
+        }
+
+        // Submit Custom Order
+        document.getElementById('submitOrderBtn').addEventListener('click', async () => {
+            if (uploadedFiles.length === 0) {
+                showToast('Please upload at least one file', 'error');
+                return;
+            }
+            
+            const orderData = {
+                userId: currentUser.uid,
+                material: document.getElementById('orderMaterial').value,
+                color: document.getElementById('orderColor').value,
+                quantity: parseInt(document.getElementById('orderQuantity').value),
+                notes: document.getElementById('orderNotes').value,
+                timestamp: new Date().toISOString(),
+                status: 'Submitted',
+                files: [] // URLs
+            };
+            
+            try {
+                const docRef = await addDoc(collection(db, 'orders'), orderData);
+                const orderId = docRef.id;
+                
+                // Upload files
+                const uploadPromises = uploadedFiles.map(async file => {
+                    const storageRef = ref(storage, `orders/${orderId}/${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    return getDownloadURL(storageRef);
+                });
+                
+                const urls = await Promise.all(uploadPromises);
+                
+                await updateDoc(doc(db, 'orders', orderId), { files: urls });
+                
+                showToast(`Order Submitted! Order ID: ${orderId}`);
+                
+                // Reset form
+                uploadedFiles = [];
+                displayFiles();
+                document.getElementById('orderNotes').value = '';
+                fileInput.value = '';
+                
+                loadDashboard();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        // Load Dashboard
+        async function loadDashboard() {
+            if (!currentUser) {
+                document.getElementById('dashboardContent').innerHTML = `
+                    <div class="glass-card empty-state">
+                        <i data-lucide="package" class="empty-icon"></i>
+                        <h3 class="empty-title">Please Login</h3>
+                        <p class="empty-text">Login to view your orders</p>
+                        <button class="btn-primary" onclick="document.getElementById('authModal').classList.add('active')">Login</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            let q;
+            if (isAdmin) {
+                q = query(collection(db, 'orders'));
+            } else {
+                q = query(collection(db, 'orders'), where('userId', '==', currentUser.uid));
+            }
+            
+            try {
+                const querySnapshot = await getDocs(q);
+                const orders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('dashboardContent');
+                
+                if (orders.length === 0) {
+                    container.innerHTML = `
+                        <div class="glass-card empty-state">
+                            <i data-lucide="package" class="empty-icon"></i>
+                            <h3 class="empty-title">No Orders Yet</h3>
+                            <p class="empty-text">Start by uploading your design or exploring our catalog</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="orders-list">
+                            ${orders.map(order => `
+                                <div class="glass-card order-card-item">
+                                    <div class="order-header">
+                                        <div class="order-id-section">
+                                            <i data-lucide="${getStatusIcon(order.status)}"></i>
+                                            <div>
+                                                <p class="order-id">${order.id}</p>
+                                                <p class="order-date">${new Date(order.timestamp).toLocaleDateString('en-IN', {
+                                                    day: 'numeric',
+                                                    month: 'short',
+                                                    year: 'numeric'
+                                                })}</p>
+                                            </div>
+                                        </div>
+                                        <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
+                                    </div>
+                                    <div class="order-details">
+                                        ${order.product ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Product:</span>
+                                                <span class="detail-value">${order.product}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${order.files && order.files.length > 0 ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Files:</span>
+                                                <span class="detail-value">${order.files.map(url => `<a href="${url}" target="_blank">View File</a>`).join(', ')}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${order.customization ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Text:</span>
+                                                <span class="detail-value">${order.customization.text}</span>
+                                            </div>
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Material:</span>
+                                                <span class="detail-value">${order.customization.material.toUpperCase()}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${order.material ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Material:</span>
+                                                <span class="detail-value">${order.material.toUpperCase()}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${order.quantity ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Quantity:</span>
+                                                <span class="detail-value">${order.quantity}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${order.totalPrice ? `
+                                            <div class="order-detail-item">
+                                                <span class="detail-label">Total:</span>
+                                                <span class="detail-value price">₹${order.totalPrice}</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    ${isAdmin ? `
+                                        <div class="form-group mt-4">
+                                            <label>Update Status</label>
+                                            <select id="status-${order.id}" class="dark-select">
+                                                <option value="Submitted" ${order.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+                                                <option value="Reviewing" ${order.status === 'Reviewing' ? 'selected' : ''}>Reviewing</option>
+                                                <option value="Printing" ${order.status === 'Printing' ? 'selected' : ''}>Printing</option>
+                                                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                                <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                            </select>
+                                            <button class="btn-primary mt-2" onclick="updateOrderStatus('${order.id}')">Save Status</button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                lucide.createIcons();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        async function updateOrderStatus(orderId) {
+            const newStatus = document.getElementById(`status-${orderId}`).value;
+            try {
+                await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
+                showToast('Status updated!');
+                loadDashboard();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'Submitted': 'clock',
+                'Reviewing': 'package',
+                'Printing': 'package',
+                'Completed': 'check-circle',
+                'Delivered': 'truck'
+            };
+            return icons[status] || 'clock';
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Event Listeners for Auth
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            document.getElementById('authModal').classList.add('active');
+        });
+
+        document.getElementById('authClose').addEventListener('click', () => {
+            document.getElementById('authModal').classList.remove('active');
+        });
+
+        document.getElementById('authModal').addEventListener('click', (e) => {
+            if (e.target.id === 'authModal') {
+                document.getElementById('authModal').classList.remove('active');
+            }
+        });
+
+        document.getElementById('toggleAuth').addEventListener('click', toggleAuthMode);
+
+        document.getElementById('authBtn').addEventListener('click', handleAuth);
+
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCatalog();
+            loadDashboard();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
