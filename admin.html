@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="styles.css">
 
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 </head>
 <body>
     <nav class="navbar" id="navbar">
@@ -53,8 +53,9 @@
         </div>
 
         <div class="glass-card order-card" id="adminPanel" style="display: none;">
-            <h3 class="section-title">Add New Product</h3>
+            <h3 class="section-title">Add / Update Product</h3>
             <div class="order-details-form">
+                <input type="hidden" id="productId">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Product Name</label>
@@ -80,6 +81,7 @@
                     </div>
                 </div>
                 <button class="btn-primary w-full" id="addProductBtn">Add Product</button>
+                <button class="btn-secondary w-full" id="cancelEditBtn" style="margin-top: 12px; display: none;">Cancel Edit</button>
             </div>
 
             <div style="height: 32px;"></div>

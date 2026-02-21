@@ -7,6 +7,8 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
     signOut,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -15,9 +17,9 @@ import {
     getFirestore,
     collection,
     addDoc,
-    getDocs,
     query,
     orderBy,
+    onSnapshot,
     where,
     updateDoc,
     doc
@@ -53,14 +55,9 @@ let isAdmin = false;
 
 const ADMIN_EMAIL = "anshyadav0135@gmail.com";
 
-const catalogProducts = [
-    { id: 1, name: "Custom Name Plates", image: "https://images.unsplash.com/photo-1621261053344-51c53e2e78a1?w=500", startingPrice: 199, description: "Personalized name plates" },
-    { id: 2, name: "Sign Boards", image: "https://images.unsplash.com/photo-1606146490395-d987a2b1d19e?w=500", startingPrice: 499, description: "Custom sign boards" },
-    { id: 3, name: "Custom Keychains", image: "https://images.unsplash.com/photo-1563620118-e3c83e61f000?w=500", startingPrice: 49, description: "Personalized keychains" },
-    { id: 4, name: "Decorative Items", image: "https://images.unsplash.com/photo-1545558014-8692f1fb4c6f?w=500", startingPrice: 299, description: "Unique decorative pieces" }
-];
-
 let catalogData = [];
+let threeReadyPromise = null;
+let ordersUnsub = null;
 
 const materials = [
     { value: "pla", label: "PLA", price: 0 },
@@ -91,6 +88,24 @@ function safeGet(id) {
 
 function getCurrencySymbol() {
     return "\u20B9";
+}
+
+async function ensureThreeLoaded() {
+    if (threeReadyPromise) return threeReadyPromise;
+    threeReadyPromise = (async () => {
+        const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js");
+        const { STLLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/STLLoader.js");
+        const { OBJLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/OBJLoader.js");
+        const { ThreeMFLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/3MFLoader.js");
+        const { OrbitControls } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js");
+
+        window.THREE = THREE;
+        window.STLLoader = STLLoader;
+        window.OBJLoader = OBJLoader;
+        window.ThreeMFLoader = ThreeMFLoader;
+        window.OrbitControls = OrbitControls;
+    })();
+    return threeReadyPromise;
 }
 
 function normalizeSuggestionText(text) {
@@ -131,7 +146,7 @@ function normalizeSuggestionText(text) {
 }
 
 // ====================== 3D PREVIEW ======================
-function loadPreview(index, file) {
+async function loadPreview(index, file) {
     const container = document.getElementById(`preview-${index}`);
     if (!container) return;
 
@@ -139,6 +154,7 @@ function loadPreview(index, file) {
     if (!["stl", "obj", "3mf"].includes(ext)) return;
 
     container.innerHTML = "";
+    await ensureThreeLoaded();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -283,9 +299,11 @@ function updateSubmitButton() {
     if (submitBtn) submitBtn.disabled = uploadedFiles.length === 0;
 }
 
-function renderModelPreview(container, file) {
+async function renderModelPreview(container, file) {
     const ext = file.name.split(".").pop().toLowerCase();
     if (!["stl", "obj", "3mf"].includes(ext)) return;
+
+    await ensureThreeLoaded();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -350,7 +368,7 @@ function renderModelPreview(container, file) {
     }
 }
 
-function openFilePreview(index) {
+async function openFilePreview(index) {
     const file = uploadedFiles[index];
     if (!file) return;
 
@@ -375,7 +393,7 @@ function openFilePreview(index) {
         const canvasWrap = document.createElement("div");
         canvasWrap.className = "file-preview-canvas";
         body.appendChild(canvasWrap);
-        renderModelPreview(canvasWrap, file);
+        await renderModelPreview(canvasWrap, file);
     } else {
         const msg = document.createElement("div");
         msg.className = "file-preview-message";
@@ -404,30 +422,27 @@ function closeFilePreview() {
 }
 
 // ====================== CATALOG ======================
-async function loadCatalog() {
+function renderCatalog(products) {
     const grid = safeGet("catalogGrid");
     if (!grid) return;
 
-    let products = [];
-    try {
-        const snapshot = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc")));
-        products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    } catch (error) {
-        products = [];
-    }
+    catalogData = products;
 
     if (products.length === 0) {
-        products = catalogProducts.map((p) => ({ id: `local-${p.id}`, ...p }));
+        grid.innerHTML = `
+            <div class="glass-card empty-state">
+                <h3>No Products Yet</h3>
+                <p class="text-secondary">Admin can add products from the admin panel.</p>
+            </div>`;
+        return;
     }
-
-    catalogData = products;
 
     grid.innerHTML = products
         .map(
             (product) => `
         <div class="glass-card catalog-card" onclick="openCustomizeModal('${product.id}')">
             <div class="catalog-image">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
             </div>
             <div class="catalog-info">
                 <h3 class="catalog-title">${product.name}</h3>
@@ -439,6 +454,20 @@ async function loadCatalog() {
         )
         .join("");
     lucide.createIcons();
+}
+
+function loadCatalog() {
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    onSnapshot(
+        q,
+        (snapshot) => {
+            const products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+            renderCatalog(products);
+        },
+        () => {
+            renderCatalog([]);
+        }
+    );
 }
 
 window.openCustomizeModal = (productId) => {
@@ -552,15 +581,16 @@ async function submitCustomOrder() {
         const docRef = await addDoc(collection(db, "orders"), orderData);
         const orderId = docRef.id;
 
-        const urls = await Promise.all(
+        const filesMeta = await Promise.all(
             uploadedFiles.map(async (file) => {
                 const storageRef = ref(storage, `orders/${orderId}/${file.name}`);
                 await uploadBytes(storageRef, file);
-                return getDownloadURL(storageRef);
+                const url = await getDownloadURL(storageRef);
+                return { name: file.name, type: file.type || "", url };
             })
         );
 
-        await updateDoc(doc(db, "orders", orderId), { files: urls });
+        await updateDoc(doc(db, "orders", orderId), { files: filesMeta });
 
         showToast(`Order Submitted! ID: ${orderId}`);
         uploadedFiles = [];
@@ -574,11 +604,15 @@ async function submitCustomOrder() {
 }
 
 // ====================== DASHBOARD ======================
-async function loadDashboard() {
+function loadDashboard() {
     const container = safeGet("dashboardContent");
     if (!container) return;
 
     if (!currentUser) {
+        if (ordersUnsub) {
+            ordersUnsub();
+            ordersUnsub = null;
+        }
         container.innerHTML = `
             <div class="glass-card empty-state">
                 <i data-lucide="package" class="empty-icon"></i>
@@ -589,57 +623,64 @@ async function loadDashboard() {
         return;
     }
 
-    try {
-        const q = isAdmin
-            ? query(collection(db, "orders"))
-            : query(collection(db, "orders"), where("userId", "==", currentUser.uid));
+    const q = isAdmin
+        ? query(collection(db, "orders"), orderBy("timestamp", "desc"))
+        : query(collection(db, "orders"), where("userId", "==", currentUser.uid), orderBy("timestamp", "desc"));
 
-        const snapshot = await getDocs(q);
-        const orders = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-
-        if (orders.length === 0) {
-            container.innerHTML = `<div class="glass-card empty-state"><h3>No Orders Yet</h3></div>`;
-            return;
-        }
-
-        container.innerHTML = `
-            <div class="orders-list">
-                ${orders
-                    .map(
-                        (order) => `
-                    <div class="glass-card order-card-item">
-                        <div class="order-header">
-                            <div class="order-id-section">
-                                <i data-lucide="${getStatusIcon(order.status)}"></i>
-                                <div>
-                                    <p class="order-id">${order.id}</p>
-                                    <p class="order-date">${new Date(order.timestamp).toLocaleDateString("en-IN")}</p>
-                                </div>
-                            </div>
-                            <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
-                        </div>
-                        ${
-                            isAdmin
-                                ? `
-                            <select id="status-${order.id}" class="dark-select">
-                                <option value="Submitted" ${order.status === "Submitted" ? "selected" : ""}>Submitted</option>
-                                <option value="Reviewing" ${order.status === "Reviewing" ? "selected" : ""}>Reviewing</option>
-                                <option value="Printing" ${order.status === "Printing" ? "selected" : ""}>Printing</option>
-                                <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
-                            </select>
-                            <button onclick="updateOrderStatus('${order.id}')" class="btn-primary" style="margin-left:10px;">Update Status</button>
-                        `
-                                : ""
-                        }
-                    </div>
-                `
-                    )
-                    .join("")}
-            </div>`;
-        lucide.createIcons();
-    } catch (error) {
-        showToast(error.message, "error");
+    if (ordersUnsub) {
+        ordersUnsub();
     }
+
+    ordersUnsub = onSnapshot(
+        q,
+        (snapshot) => {
+            const orders = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+            if (orders.length === 0) {
+                container.innerHTML = `<div class="glass-card empty-state"><h3>No Orders Yet</h3></div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="orders-list">
+                    ${orders
+                        .map(
+                            (order) => `
+                        <div class="glass-card order-card-item">
+                            <div class="order-header">
+                                <div class="order-id-section">
+                                    <i data-lucide="${getStatusIcon(order.status)}"></i>
+                                    <div>
+                                        <p class="order-id">${order.id}</p>
+                                        <p class="order-date">${new Date(order.timestamp).toLocaleDateString("en-IN")}</p>
+                                    </div>
+                                </div>
+                                <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
+                            </div>
+                            ${
+                                isAdmin
+                                    ? `
+                                <select id="status-${order.id}" class="dark-select">
+                                    <option value="Submitted" ${order.status === "Submitted" ? "selected" : ""}>Submitted</option>
+                                    <option value="Reviewing" ${order.status === "Reviewing" ? "selected" : ""}>Reviewing</option>
+                                    <option value="Printing" ${order.status === "Printing" ? "selected" : ""}>Printing</option>
+                                    <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
+                                </select>
+                                <button onclick="updateOrderStatus('${order.id}')" class="btn-primary" style="margin-left:10px;">Update Status</button>
+                            `
+                                    : ""
+                            }
+                        </div>
+                    `
+                        )
+                        .join("")}
+                </div>`;
+            lucide.createIcons();
+        },
+        (error) => {
+            showToast(error.message, "error");
+        }
+    );
 }
 
 window.updateOrderStatus = async (orderId) => {
@@ -772,6 +813,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 await signInWithEmailAndPassword(auth, email, password);
                 showToast("Logged in successfully!");
             }
+            currentUser = auth.currentUser;
+            isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+            loadDashboard();
+            safeGet("authModal")?.classList.remove("active");
+        } catch (error) {
+            showToast(error.message, "error");
+        }
+    });
+
+    safeGet("googleAuthBtn")?.addEventListener("click", async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            showToast("Logged in with Google!");
             currentUser = auth.currentUser;
             isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
             loadDashboard();

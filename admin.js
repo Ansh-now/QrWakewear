@@ -18,6 +18,7 @@ import {
     query,
     orderBy,
     deleteDoc,
+    updateDoc,
     doc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -83,13 +84,21 @@ async function loadProducts() {
                 (product) => `
             <div class="glass-card catalog-card" data-id="${product.id}">
                 <div class="catalog-image">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
                 </div>
                 <div class="catalog-info">
                     <h3 class="catalog-title">${product.name}</h3>
                     <p class="catalog-description">${product.description}</p>
                     <p class="catalog-price">Starting at ₹${product.startingPrice}</p>
-                    <div style="margin-top: 16px;">
+                    <div style="margin-top: 16px; display: flex; gap: 12px;">
+                        <button class="btn-secondary" data-action="edit"
+                            data-id="${product.id}"
+                            data-name="${product.name}"
+                            data-description="${product.description}"
+                            data-price="${product.startingPrice}"
+                            data-image="${product.image}">
+                            Edit
+                        </button>
                         <button class="btn-secondary" data-action="delete" data-id="${product.id}">Delete</button>
                     </div>
                 </div>
@@ -109,6 +118,7 @@ async function addProduct() {
         return;
     }
 
+    const productId = safeGet("productId")?.value.trim();
     const name = safeGet("productName")?.value.trim();
     const description = safeGet("productDescription")?.value.trim();
     const price = parseInt(safeGet("productPrice")?.value, 10);
@@ -132,21 +142,28 @@ async function addProduct() {
             return;
         }
 
-        await addDoc(collection(db, "products"), {
-            name,
-            description,
-            startingPrice: price,
-            image: finalImageUrl,
-            createdAt: serverTimestamp()
-        });
+        if (productId) {
+            await updateDoc(doc(db, "products", productId), {
+                name,
+                description,
+                startingPrice: price,
+                image: finalImageUrl,
+                updatedAt: serverTimestamp()
+            });
+            showToast("Product updated successfully!");
+        } else {
+            await addDoc(collection(db, "products"), {
+                name,
+                description,
+                startingPrice: price,
+                image: finalImageUrl,
+                createdAt: serverTimestamp()
+            });
+            showToast("Product added successfully!");
+        }
 
-        safeGet("productName").value = "";
-        safeGet("productDescription").value = "";
-        safeGet("productPrice").value = "199";
-        safeGet("productImageUrl").value = "";
-        safeGet("productImageFile").value = "";
+        resetForm();
 
-        showToast("Product added successfully!");
         loadProducts();
     } catch (error) {
         showToast(error.message, "error");
@@ -162,6 +179,30 @@ async function deleteProduct(productId) {
     } catch (error) {
         showToast(error.message, "error");
     }
+}
+
+function resetForm() {
+    safeGet("productId").value = "";
+    safeGet("productName").value = "";
+    safeGet("productDescription").value = "";
+    safeGet("productPrice").value = "199";
+    safeGet("productImageUrl").value = "";
+    safeGet("productImageFile").value = "";
+    safeGet("addProductBtn").textContent = "Add Product";
+    const cancelBtn = safeGet("cancelEditBtn");
+    if (cancelBtn) cancelBtn.style.display = "none";
+}
+
+function populateForm(product) {
+    safeGet("productId").value = product.id;
+    safeGet("productName").value = product.name || "";
+    safeGet("productDescription").value = product.description || "";
+    safeGet("productPrice").value = product.startingPrice || 0;
+    safeGet("productImageUrl").value = product.image || "";
+    safeGet("productImageFile").value = "";
+    safeGet("addProductBtn").textContent = "Update Product";
+    const cancelBtn = safeGet("cancelEditBtn");
+    if (cancelBtn) cancelBtn.style.display = "inline-flex";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -212,11 +253,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     safeGet("addProductBtn")?.addEventListener("click", addProduct);
+    safeGet("cancelEditBtn")?.addEventListener("click", resetForm);
 
     safeGet("adminProductsList")?.addEventListener("click", (e) => {
-        const btn = e.target.closest("button[data-action='delete']");
-        if (!btn) return;
-        const id = btn.dataset.id;
-        deleteProduct(id);
+        const deleteBtn = e.target.closest("button[data-action='delete']");
+        const editBtn = e.target.closest("button[data-action='edit']");
+        if (deleteBtn) {
+            const id = deleteBtn.dataset.id;
+            deleteProduct(id);
+        }
+        if (editBtn) {
+            const id = editBtn.dataset.id;
+            const name = editBtn.dataset.name;
+            const description = editBtn.dataset.description;
+            const price = parseInt(editBtn.dataset.price, 10);
+            const image = editBtn.dataset.image;
+            populateForm({ id, name, description, startingPrice: price, image });
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     });
 });

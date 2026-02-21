@@ -15,21 +15,9 @@
     <link rel="stylesheet" href="styles.css">
     
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     
-    <!-- Three.js for 3D previews -->
-    <script type="module">
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/STLLoader.js';
-        import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/OBJLoader.js';
-        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/3MFLoader.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js';
-        window.THREE = THREE;
-        window.STLLoader = STLLoader;
-        window.OBJLoader = OBJLoader;
-        window.ThreeMFLoader = ThreeMFLoader;
-        window.OrbitControls = OrbitControls;
-    </script>
+    <!-- Three.js for 3D previews is lazy-loaded in script.js for faster initial load -->
 </head>
 <body>
 
@@ -94,7 +82,7 @@
             
             <div class="hero-image-container">
                 <div class="hero-image" id="heroImage">
-                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800" alt="3D Printing">
+                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800" alt="3D Printing" loading="lazy">
                     <div class="hero-image-glow"></div>
                 </div>
             </div>
@@ -383,6 +371,9 @@
                 </div>
                 
                 <button class="btn-primary w-full" id="authBtn">Login</button>
+                <button class="btn-secondary btn-google w-full" id="googleAuthBtn" style="margin-top: 12px;">
+                    Continue with Google
+                </button>
                 <p class="text-center mt-4">Don't have an account? <span class="text-brand cursor-pointer" id="toggleAuth">Sign Up</span></p>
             </div>
         </div>

@@ -860,6 +860,27 @@ section {
     animation: modalSlideIn 0.3s ease-out;
 }
 
+.auth-modal .modal-content,
+#authModal .modal-content {
+    max-height: 95vh;
+}
+
+.auth-modal .modal-body,
+#authModal .modal-body {
+    min-height: 320px;
+}
+
+.btn-google {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid var(--border-subtle);
+}
+
+.btn-google:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
 @keyframes modalSlideIn {
     from {
         opacity: 0;
