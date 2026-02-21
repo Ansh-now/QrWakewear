@@ -145,6 +145,20 @@ function normalizeSuggestionText(text) {
     return fallback.slice(0, 5);
 }
 
+function setButtonLoading(button, isLoading, text = "Loading...") {
+    if (!button) return;
+    if (isLoading) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = text;
+        button.classList.add("is-loading");
+        button.disabled = true;
+    } else {
+        button.textContent = button.dataset.originalText || button.textContent;
+        button.classList.remove("is-loading");
+        button.disabled = false;
+    }
+}
+
 // ====================== 3D PREVIEW ======================
 async function loadPreview(index, file) {
     const container = document.getElementById(`preview-${index}`);
@@ -431,8 +445,8 @@ function renderCatalog(products) {
     if (products.length === 0) {
         grid.innerHTML = `
             <div class="glass-card empty-state">
-                <h3>No Products Yet</h3>
-                <p class="text-secondary">Admin can add products from the admin panel.</p>
+                <h3>Loading Products...</h3>
+                <p class="text-secondary">Fetching latest catalog.</p>
             </div>`;
         return;
     }
@@ -457,11 +471,24 @@ function renderCatalog(products) {
 }
 
 function loadCatalog() {
+    renderCatalog([]);
     const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
     onSnapshot(
         q,
         (snapshot) => {
             const products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+            if (products.length === 0) {
+                renderCatalog([]);
+                const grid = safeGet("catalogGrid");
+                if (grid) {
+                    grid.innerHTML = `
+                        <div class="glass-card empty-state">
+                            <h3>No Products Yet</h3>
+                            <p class="text-secondary">Admin can add products from the admin panel.</p>
+                        </div>`;
+                }
+                return;
+            }
             renderCatalog(products);
         },
         () => {
@@ -702,12 +729,15 @@ async function getProjectSuggestions() {
     if (!keyword) return showToast("Enter a keyword", "error");
 
     try {
+        const suggestBtn = safeGet("suggestBtn");
+        setButtonLoading(suggestBtn, true, "Generating...");
         const prompt = `Generate 5 college project ideas for 3D printing related to ${keyword}`;
         const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
         const text = await res.text();
         const suggestions = normalizeSuggestionText(text);
         if (suggestions.length === 0) {
             showToast("No suggestions found. Try another keyword.", "error");
+            setButtonLoading(safeGet("suggestBtn"), false);
             return;
         }
 
@@ -732,8 +762,10 @@ async function getProjectSuggestions() {
         const container = safeGet("suggestionsContainer");
         if (container) container.style.display = "block";
         lucide.createIcons();
+        setButtonLoading(safeGet("suggestBtn"), false);
     } catch (e) {
         showToast("Failed to get suggestions", "error");
+        setButtonLoading(safeGet("suggestBtn"), false);
     }
 }
 

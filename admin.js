@@ -62,6 +62,20 @@ function showToast(message, type = "success") {
     setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
+function setButtonLoading(button, isLoading, text = "Loading...") {
+    if (!button) return;
+    if (isLoading) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = text;
+        button.classList.add("is-loading");
+        button.disabled = true;
+    } else {
+        button.textContent = button.dataset.originalText || button.textContent;
+        button.classList.remove("is-loading");
+        button.disabled = false;
+    }
+}
+
 async function uploadProductImage(file) {
     const imageId = crypto.randomUUID();
     const storageRef = ref(storage, `products/${imageId}/${file.name}`);
@@ -74,6 +88,7 @@ async function loadProducts() {
     if (!list) return;
 
     try {
+        list.innerHTML = `<div class="glass-card empty-state"><h3>Loading Products...</h3></div>`;
         const snapshot = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc")));
         const products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
@@ -135,7 +150,9 @@ async function addProduct() {
 
     let finalImageUrl = imageUrl;
 
+    const actionBtn = safeGet("addProductBtn");
     try {
+        setButtonLoading(actionBtn, true, productId ? "Updating..." : "Adding...");
         if (imageFile) {
             finalImageUrl = await uploadProductImage(imageFile);
         }
@@ -170,6 +187,8 @@ async function addProduct() {
         loadProducts();
     } catch (error) {
         showToast(error.message, "error");
+    } finally {
+        setButtonLoading(actionBtn, false);
     }
 }
 
