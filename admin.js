@@ -33,11 +33,14 @@ import {
 const firebaseConfig = {
     apiKey: "AIzaSyCmWI6jwHR0zbiYMFwfxuh9paS3ET9qvuE",
     authDomain: "nexlayelabs.firebaseapp.com",
+    databaseURL: "https://nexlayelabs-default-rtdb.firebaseio.com",
     projectId: "nexlayelabs",
     storageBucket: "nexlayelabs.firebasestorage.app",
     messagingSenderId: "414827106722",
-    appId: "1:414827106722:web:0327f53494da1afe69a2fb"
-};
+    appId: "1:414827106722:web:0327f53494da1afe69a2fb",
+    measurementId: "G-RXBD8D8Q5Q"
+  };
+  
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
