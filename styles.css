@@ -645,6 +645,28 @@ section {
     opacity: 0.7;
 }
 
+.file-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-file-btn {
+    background: rgba(0, 255, 209, 0.15);
+    color: var(--brand-primary);
+    border: 1px solid var(--brand-primary);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preview-file-btn:hover {
+    background: var(--brand-primary);
+    color: #000000;
+}
+
 .order-details-form {
     display: flex;
     flex-direction: column;
@@ -877,6 +899,33 @@ section {
 
 .modal-body {
     padding: 24px;
+}
+
+.file-preview-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.file-preview-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.file-preview-canvas {
+    width: 100%;
+    height: 400px;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.file-preview-message {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
 }
 
 .preview-section {

@@ -3,40 +3,41 @@
 // ===============================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signOut, 
-    onAuthStateChanged 
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    getDocs, 
-    query, 
-    where, 
-    updateDoc, 
-    doc 
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy,
+    where,
+    updateDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { 
-    getStorage, 
-    ref, 
-    uploadBytes, 
-    getDownloadURL 
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// Firebase Config
+// Firebase Config (New Project)
 const firebaseConfig = {
-    apiKey: "AIzaSyBqXMwAZSsKi8_LGWmnPF36Z1jyZzDVPCM",
-    authDomain: "nexlayerlab.firebaseapp.com",
-    projectId: "nexlayerlab",
-    storageBucket: "nexlayerlab.appspot.com",
-    messagingSenderId: "52859959386",
-    appId: "1:52859959386:web:c863a84e27e45a825e4063"
+    apiKey: "AIzaSyCmWI6jwHR0zbiYMFwfxuh9paS3ET9qvuE",
+    authDomain: "nexlayelabs.firebaseapp.com",
+    projectId: "nexlayelabs",
+    storageBucket: "nexlayelabs.firebasestorage.app",
+    messagingSenderId: "414827106722",
+    appId: "1:414827106722:web:0327f53494da1afe69a2fb"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -50,7 +51,7 @@ let currentProduct = null;
 let currentUser = null;
 let isAdmin = false;
 
-const ADMIN_EMAIL = "anshyadav0135@gmail.com";   // ← Change this to your real admin email
+const ADMIN_EMAIL = "anshyadav0135@gmail.com";
 
 const catalogProducts = [
     { id: 1, name: "Custom Name Plates", image: "https://images.unsplash.com/photo-1621261053344-51c53e2e78a1?w=500", startingPrice: 199, description: "Personalized name plates" },
@@ -58,6 +59,8 @@ const catalogProducts = [
     { id: 3, name: "Custom Keychains", image: "https://images.unsplash.com/photo-1563620118-e3c83e61f000?w=500", startingPrice: 49, description: "Personalized keychains" },
     { id: 4, name: "Decorative Items", image: "https://images.unsplash.com/photo-1545558014-8692f1fb4c6f?w=500", startingPrice: 299, description: "Unique decorative pieces" }
 ];
+
+let catalogData = [];
 
 const materials = [
     { value: "pla", label: "PLA", price: 0 },
@@ -74,80 +77,27 @@ const sizes = [
 ];
 
 // ====================== UTILITY ======================
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
     toast.textContent = message;
     toast.className = `toast ${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 3000);
+    setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-// ====================== AUTH ======================
-onAuthStateChanged(auth, user => {
-    currentUser = user;
-    isAdmin = user && user.email === ADMIN_EMAIL;
+function safeGet(id) {
+    return document.getElementById(id);
+}
 
-    document.getElementById('loginBtn').style.display = user ? 'none' : 'inline-flex';
-    document.getElementById('logoutBtn').style.display = user ? 'inline-flex' : 'none';
-    document.getElementById('userGreeting').style.display = user ? 'inline' : 'none';
-
-    if (user) {
-        document.getElementById('userEmail').textContent = user.email.split('@')[0];
-    }
-    loadDashboard();
-});
-
-document.getElementById('loginBtn').addEventListener('click', () => {
-    document.getElementById('authModal').classList.add('active');
-});
-
-document.getElementById('authClose').addEventListener('click', () => {
-    document.getElementById('authModal').classList.remove('active');
-});
-
-document.getElementById('toggleAuth').addEventListener('click', () => {
-    const title = document.getElementById('authTitle');
-    const btn = document.getElementById('authBtn');
-    if (title.textContent === 'Login') {
-        title.textContent = 'Sign Up';
-        btn.textContent = 'Sign Up';
-    } else {
-        title.textContent = 'Login';
-        btn.textContent = 'Login';
-    }
-});
-
-document.getElementById('authBtn').addEventListener('click', async () => {
-    const email = document.getElementById('authEmail').value.trim();
-    const password = document.getElementById('authPassword').value;
-    const isSignup = document.getElementById('authBtn').textContent === 'Sign Up';
-
-    try {
-        if (isSignup) {
-            await createUserWithEmailAndPassword(auth, email, password);
-            showToast('Account created successfully!');
-        } else {
-            await signInWithEmailAndPassword(auth, email, password);
-            showToast('Logged in successfully!');
-        }
-        document.getElementById('authModal').classList.remove('active');
-    } catch (error) {
-        showToast(error.message, 'error');
-    }
-});
-
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    signOut(auth);
-});
-
-// ====================== 3D PREVIEW (Fixed) ======================
+// ====================== 3D PREVIEW ======================
 function loadPreview(index, file) {
     const container = document.getElementById(`preview-${index}`);
     if (!container) return;
 
-    const ext = file.name.split('.').pop().toLowerCase();
-    if (!['stl', 'obj'].includes(ext)) return;
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (!["stl", "obj"].includes(ext)) return;
 
-    container.innerHTML = '';
+    container.innerHTML = "";
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -168,7 +118,7 @@ function loadPreview(index, file) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        let loader = ext === 'stl' ? new STLLoader() : new OBJLoader();
+        let loader = ext === "stl" ? new STLLoader() : new OBJLoader();
         let object = loader.parse(e.target.result);
 
         if (object.isBufferGeometry) {
@@ -198,30 +148,17 @@ function loadPreview(index, file) {
 }
 
 // ====================== FILE UPLOAD ======================
-const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
-
-uploadZone.addEventListener('click', () => fileInput.click());
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-active'); });
-uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-active'));
-uploadZone.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadZone.classList.remove('drag-active');
-    handleFiles(e.dataTransfer.files);
-});
-
-fileInput.addEventListener('change', e => handleFiles(e.target.files));
-
 function handleFiles(files) {
     if (!currentUser) {
-        showToast('Please login first', 'error');
-        document.getElementById('authModal').classList.add('active');
+        showToast("Please login first", "error");
+        const modal = safeGet("authModal");
+        if (modal) modal.classList.add("active");
         return;
     }
 
-    const validFiles = Array.from(files).filter(file => {
-        const ext = '.' + file.name.split('.').pop().toLowerCase();
-        return ['.stl','.obj','.3mf','.png','.jpg','.jpeg'].includes(ext);
+    const validFiles = Array.from(files).filter((file) => {
+        const ext = "." + file.name.split(".").pop().toLowerCase();
+        return [".stl", ".obj", ".3mf", ".png", ".jpg", ".jpeg"].includes(ext);
     });
 
     uploadedFiles = [...uploadedFiles, ...validFiles];
@@ -229,52 +166,192 @@ function handleFiles(files) {
 }
 
 function displayFiles() {
-    const container = document.getElementById('uploadedFiles');
-    const list = document.getElementById('filesList');
-    
+    const container = safeGet("uploadedFiles");
+    const list = safeGet("filesList");
+
+    if (!container || !list) return;
+
     if (uploadedFiles.length === 0) {
-        container.style.display = 'none';
+        container.style.display = "none";
+        updateSubmitButton();
         return;
     }
 
-    document.getElementById('fileCount').textContent = uploadedFiles.length;
+    const fileCount = safeGet("fileCount");
+    if (fileCount) fileCount.textContent = uploadedFiles.length;
 
-    list.innerHTML = uploadedFiles.map((file, index) => `
+    list.innerHTML = uploadedFiles
+        .map(
+            (file, index) => `
         <div class="file-item">
             <i data-lucide="file-text" class="file-icon"></i>
             <div class="file-info">
                 <p class="file-name">${file.name}</p>
                 <p class="file-size">${(file.size / 1024).toFixed(2)} KB</p>
             </div>
-            <button class="remove-file-btn" onclick="removeFile(${index})">
-                <i data-lucide="x"></i>
-            </button>
+            <div class="file-actions">
+                <button class="preview-file-btn" data-action="preview" data-index="${index}">
+                    <i data-lucide="eye"></i>
+                </button>
+                <button class="remove-file-btn" data-action="remove" data-index="${index}">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
             <div class="file-preview" id="preview-${index}"></div>
         </div>
-    `).join('');
+    `
+        )
+        .join("");
 
-    container.style.display = 'block';
+    container.style.display = "block";
     lucide.createIcons();
 
     uploadedFiles.forEach((file, index) => loadPreview(index, file));
+    updateSubmitButton();
 }
 
-window.removeFile = (index) => {
+function removeFileByIndex(index) {
     uploadedFiles.splice(index, 1);
     displayFiles();
-};
+}
+
+window.removeFile = (index) => removeFileByIndex(index);
 
 function updateSubmitButton() {
-    document.getElementById('submitOrderBtn').disabled = uploadedFiles.length === 0;
+    const submitBtn = safeGet("submitOrderBtn");
+    if (submitBtn) submitBtn.disabled = uploadedFiles.length === 0;
+}
+
+function renderModelPreview(container, file) {
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (!["stl", "obj"].includes(ext)) return;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111111);
+
+    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(10, 10, 10);
+    scene.add(dirLight);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        let loader = ext === "stl" ? new STLLoader() : new OBJLoader();
+        let object = loader.parse(e.target.result);
+
+        if (object.isBufferGeometry) {
+            object = new THREE.Mesh(object, new THREE.MeshPhongMaterial({ color: 0xaaaaaa, shininess: 30 }));
+        }
+
+        scene.add(object);
+
+        const box = new THREE.Box3().setFromObject(object);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3()).length();
+
+        object.position.sub(center);
+        camera.position.set(0, size * 0.4, size * 1.8);
+        camera.lookAt(0, 0, 0);
+        controls.target.set(0, 0, 0);
+        controls.update();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function openFilePreview(index) {
+    const file = uploadedFiles[index];
+    if (!file) return;
+
+    const modal = safeGet("filePreviewModal");
+    const body = safeGet("filePreviewBody");
+    const title = safeGet("filePreviewTitle");
+    if (!modal || !body || !title) return;
+
+    title.textContent = file.name;
+    body.innerHTML = "";
+
+    const ext = file.name.split(".").pop().toLowerCase();
+    const imageExts = ["png", "jpg", "jpeg", "gif", "webp"];
+
+    if (imageExts.includes(ext)) {
+        const img = document.createElement("img");
+        const url = URL.createObjectURL(file);
+        img.onload = () => URL.revokeObjectURL(url);
+        img.src = url;
+        body.appendChild(img);
+    } else if (["stl", "obj"].includes(ext)) {
+        const canvasWrap = document.createElement("div");
+        canvasWrap.className = "file-preview-canvas";
+        body.appendChild(canvasWrap);
+        renderModelPreview(canvasWrap, file);
+    } else {
+        const msg = document.createElement("div");
+        msg.className = "file-preview-message";
+        msg.textContent = "Preview not available for this file type. Use the button below to open it.";
+        body.appendChild(msg);
+
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(file);
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.className = "btn-secondary";
+        link.textContent = "Open File";
+        link.addEventListener("click", () => setTimeout(() => URL.revokeObjectURL(url), 1000));
+        body.appendChild(link);
+    }
+
+    modal.classList.add("active");
+}
+
+function closeFilePreview() {
+    const modal = safeGet("filePreviewModal");
+    const body = safeGet("filePreviewBody");
+    if (body) body.innerHTML = "";
+    if (modal) modal.classList.remove("active");
 }
 
 // ====================== CATALOG ======================
-function loadCatalog() {
-    const grid = document.getElementById('catalogGrid');
-    grid.innerHTML = catalogProducts.map(product => `
-        <div class="glass-card catalog-card" onclick="openCustomizeModal(${product.id})">
+async function loadCatalog() {
+    const grid = safeGet("catalogGrid");
+    if (!grid) return;
+
+    let products = [];
+    try {
+        const snapshot = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc")));
+        products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (error) {
+        products = [];
+    }
+
+    if (products.length === 0) {
+        products = catalogProducts.map((p) => ({ id: `local-${p.id}`, ...p }));
+    }
+
+    catalogData = products;
+
+    grid.innerHTML = products
+        .map(
+            (product) => `
+        <div class="glass-card catalog-card" onclick="openCustomizeModal('${product.id}')">
             <div class="catalog-image">
-                <img src="\( {product.image}" alt=" \){product.name}">
+                <img src="${product.image}" alt="${product.name}">
             </div>
             <div class="catalog-info">
                 <h3 class="catalog-title">${product.name}</h3>
@@ -282,118 +359,149 @@ function loadCatalog() {
                 <p class="catalog-price">Starting at ₹${product.startingPrice}</p>
             </div>
         </div>
-    `).join('');
+    `
+        )
+        .join("");
     lucide.createIcons();
 }
 
 window.openCustomizeModal = (productId) => {
     if (!currentUser) {
-        showToast('Please login to customize', 'error');
-        document.getElementById('authModal').classList.add('active');
+        showToast("Please login to customize", "error");
+        const modal = safeGet("authModal");
+        if (modal) modal.classList.add("active");
         return;
     }
-    currentProduct = catalogProducts.find(p => p.id === productId);
-    document.getElementById('modalTitle').textContent = `Customize ${currentProduct.name}`;
-    document.getElementById('customizeModal').classList.add('active');
+    currentProduct = catalogData.find((p) => `${p.id}` === `${productId}`) || null;
+    if (!currentProduct) {
+        showToast("Product not found", "error");
+        return;
+    }
+    const title = safeGet("modalTitle");
+    if (title && currentProduct) title.textContent = `Customize ${currentProduct.name}`;
+    const modal = safeGet("customizeModal");
+    if (modal) modal.classList.add("active");
 };
 
 // ====================== CUSTOMIZE MODAL ======================
-['customText', 'customSize', 'customColor', 'customMaterial', 'customQuantity'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', () => {
-        updatePreview();
-        calculatePrice();
-    });
-});
-
 function updatePreview() {
-    const text = document.getElementById('customText').value || 'Your text here';
-    document.getElementById('previewText').textContent = text;
+    const textInput = safeGet("customText");
+    const previewText = safeGet("previewText");
+    if (previewText) previewText.textContent = textInput && textInput.value.trim() ? textInput.value.trim() : "Your text here";
+
+    const sizeValue = safeGet("customSize")?.value || "medium";
+    const colorValue = safeGet("customColor")?.value || "black";
+    const materialValue = safeGet("customMaterial")?.value || "pla";
+
+    const sizeLabel = sizes.find((s) => s.value === sizeValue)?.label || "Medium";
+    const materialLabel = materials.find((m) => m.value === materialValue)?.label || "PLA";
+
+    const previewSize = safeGet("previewSize");
+    const previewColor = safeGet("previewColor");
+    const previewMaterial = safeGet("previewMaterial");
+
+    if (previewSize) previewSize.textContent = `Size: ${sizeLabel}`;
+    if (previewColor) previewColor.textContent = `Color: ${colorValue}`;
+    if (previewMaterial) previewMaterial.textContent = `Material: ${materialLabel}`;
 }
 
 function calculatePrice() {
     if (!currentProduct) return;
     const base = currentProduct.startingPrice;
-    const sizePrice = sizes.find(s => s.value === document.getElementById('customSize').value)?.price || 0;
-    const matPrice = materials.find(m => m.value === document.getElementById('customMaterial').value)?.price || 0;
-    const qty = parseInt(document.getElementById('customQuantity').value) || 1;
-    document.getElementById('totalPrice').textContent = `₹${(base + sizePrice + matPrice) * qty}`;
+    const sizePrice = sizes.find((s) => s.value === safeGet("customSize")?.value)?.price || 0;
+    const matPrice = materials.find((m) => m.value === safeGet("customMaterial")?.value)?.price || 0;
+    const qty = parseInt(safeGet("customQuantity")?.value, 10) || 1;
+    const total = (base + sizePrice + matPrice) * qty;
+
+    const totalPrice = safeGet("totalPrice");
+    if (totalPrice) totalPrice.textContent = `₹${total}`;
 }
 
-document.getElementById('placeOrderBtn').addEventListener('click', async () => {
-    if (!document.getElementById('customText').value.trim()) {
-        showToast('Please enter custom text', 'error');
+async function placeOrder() {
+    const textValue = safeGet("customText")?.value.trim() || "";
+    if (!textValue) {
+        showToast("Please enter custom text", "error");
         return;
     }
+
+    if (!currentProduct || !currentUser) return;
 
     const orderData = {
         userId: currentUser.uid,
         product: currentProduct.name,
         customization: {
-            text: document.getElementById('customText').value,
-            size: document.getElementById('customSize').value,
-            color: document.getElementById('customColor').value,
-            material: document.getElementById('customMaterial').value,
-            quantity: parseInt(document.getElementById('customQuantity').value)
+            text: textValue,
+            size: safeGet("customSize")?.value,
+            color: safeGet("customColor")?.value,
+            material: safeGet("customMaterial")?.value,
+            quantity: parseInt(safeGet("customQuantity")?.value, 10)
         },
-        totalPrice: parseInt(document.getElementById('totalPrice').textContent.replace('₹','')),
-        status: 'Submitted',
+        totalPrice: parseInt((safeGet("totalPrice")?.textContent || "").replace("₹", ""), 10),
+        status: "Submitted",
         timestamp: new Date().toISOString()
     };
 
     try {
-        await addDoc(collection(db, 'orders'), orderData);
-        showToast('Order placed successfully!');
-        document.getElementById('customizeModal').classList.remove('active');
+        await addDoc(collection(db, "orders"), orderData);
+        showToast("Order placed successfully!");
+        const modal = safeGet("customizeModal");
+        if (modal) modal.classList.remove("active");
         loadDashboard();
     } catch (error) {
-        showToast(error.message, 'error');
+        showToast(error.message, "error");
     }
-});
+}
 
 // ====================== SUBMIT CUSTOM ORDER ======================
-document.getElementById('submitOrderBtn').addEventListener('click', async () => {
+async function submitCustomOrder() {
     if (uploadedFiles.length === 0) {
-        showToast('Please upload at least one file', 'error');
+        showToast("Please upload at least one file", "error");
         return;
     }
 
+    if (!currentUser) return;
+
     const orderData = {
         userId: currentUser.uid,
-        material: document.getElementById('orderMaterial').value,
-        color: document.getElementById('orderColor').value,
-        quantity: parseInt(document.getElementById('orderQuantity').value),
-        notes: document.getElementById('orderNotes').value,
-        status: 'Submitted',
+        material: safeGet("orderMaterial")?.value,
+        color: safeGet("orderColor")?.value,
+        quantity: parseInt(safeGet("orderQuantity")?.value, 10),
+        notes: safeGet("orderNotes")?.value,
+        status: "Submitted",
         timestamp: new Date().toISOString(),
         files: []
     };
 
     try {
-        const docRef = await addDoc(collection(db, 'orders'), orderData);
+        const docRef = await addDoc(collection(db, "orders"), orderData);
         const orderId = docRef.id;
 
-        const urls = await Promise.all(uploadedFiles.map(async file => {
-            const storageRef = ref(storage, `orders/\( {orderId}/ \){file.name}`);
-            await uploadBytes(storageRef, file);
-            return getDownloadURL(storageRef);
-        }));
+        const urls = await Promise.all(
+            uploadedFiles.map(async (file) => {
+                const storageRef = ref(storage, `orders/${orderId}/${file.name}`);
+                await uploadBytes(storageRef, file);
+                return getDownloadURL(storageRef);
+            })
+        );
 
-        await updateDoc(doc(db, 'orders', orderId), { files: urls });
+        await updateDoc(doc(db, "orders", orderId), { files: urls });
 
         showToast(`Order Submitted! ID: ${orderId}`);
         uploadedFiles = [];
         displayFiles();
-        document.getElementById('orderNotes').value = '';
+        const notes = safeGet("orderNotes");
+        if (notes) notes.value = "";
         loadDashboard();
     } catch (error) {
-        showToast(error.message, 'error');
+        showToast(error.message, "error");
     }
-});
+}
 
 // ====================== DASHBOARD ======================
 async function loadDashboard() {
-    const container = document.getElementById('dashboardContent');
+    const container = safeGet("dashboardContent");
+    if (!container) return;
+
     if (!currentUser) {
         container.innerHTML = `
             <div class="glass-card empty-state">
@@ -405,115 +513,272 @@ async function loadDashboard() {
         return;
     }
 
-    const q = isAdmin 
-        ? query(collection(db, 'orders')) 
-        : query(collection(db, 'orders'), where('userId', '==', currentUser.uid));
+    try {
+        const q = isAdmin
+            ? query(collection(db, "orders"))
+            : query(collection(db, "orders"), where("userId", "==", currentUser.uid));
 
-    const snapshot = await getDocs(q);
-    const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const snapshot = await getDocs(q);
+        const orders = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
-    if (orders.length === 0) {
-        container.innerHTML = `<div class="glass-card empty-state"><h3>No Orders Yet</h3></div>`;
-        return;
-    }
+        if (orders.length === 0) {
+            container.innerHTML = `<div class="glass-card empty-state"><h3>No Orders Yet</h3></div>`;
+            return;
+        }
 
-    container.innerHTML = `
-        <div class="orders-list">
-            ${orders.map(order => `
-                <div class="glass-card order-card-item">
-                    <div class="order-header">
-                        <div class="order-id-section">
-                            <i data-lucide="${getStatusIcon(order.status)}"></i>
-                            <div>
-                                <p class="order-id">${order.id}</p>
-                                <p class="order-date">${new Date(order.timestamp).toLocaleDateString('en-IN')}</p>
+        container.innerHTML = `
+            <div class="orders-list">
+                ${orders
+                    .map(
+                        (order) => `
+                    <div class="glass-card order-card-item">
+                        <div class="order-header">
+                            <div class="order-id-section">
+                                <i data-lucide="${getStatusIcon(order.status)}"></i>
+                                <div>
+                                    <p class="order-id">${order.id}</p>
+                                    <p class="order-date">${new Date(order.timestamp).toLocaleDateString("en-IN")}</p>
+                                </div>
                             </div>
+                            <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span>
                         </div>
-                        <span class="status-badge status-\( {order.status.toLowerCase()}"> \){order.status}</span>
+                        ${
+                            isAdmin
+                                ? `
+                            <select id="status-${order.id}" class="dark-select">
+                                <option value="Submitted" ${order.status === "Submitted" ? "selected" : ""}>Submitted</option>
+                                <option value="Reviewing" ${order.status === "Reviewing" ? "selected" : ""}>Reviewing</option>
+                                <option value="Printing" ${order.status === "Printing" ? "selected" : ""}>Printing</option>
+                                <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
+                            </select>
+                            <button onclick="updateOrderStatus('${order.id}')" class="btn-primary" style="margin-left:10px;">Update Status</button>
+                        `
+                                : ""
+                        }
                     </div>
-                    ${isAdmin ? `
-                        <select id="status-${order.id}" class="dark-select">
-                            <option value="Submitted" ${order.status==='Submitted'?'selected':''}>Submitted</option>
-                            <option value="Reviewing" ${order.status==='Reviewing'?'selected':''}>Reviewing</option>
-                            <option value="Printing" ${order.status==='Printing'?'selected':''}>Printing</option>
-                            <option value="Completed" ${order.status==='Completed'?'selected':''}>Completed</option>
-                        </select>
-                        <button onclick="updateOrderStatus('${order.id}')" class="btn-primary" style="margin-left:10px;">Update Status</button>
-                    ` : ''}
-                </div>
-            `).join('')}
-        </div>`;
-    lucide.createIcons();
+                `
+                    )
+                    .join("")}
+            </div>`;
+        lucide.createIcons();
+    } catch (error) {
+        showToast(error.message, "error");
+    }
 }
 
 window.updateOrderStatus = async (orderId) => {
-    const newStatus = document.getElementById(`status-${orderId}`).value;
-    await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
-    showToast('Status updated!');
+    const newStatus = safeGet(`status-${orderId}`)?.value;
+    if (!newStatus) return;
+    await updateDoc(doc(db, "orders", orderId), { status: newStatus });
+    showToast("Status updated!");
     loadDashboard();
 };
 
 function getStatusIcon(status) {
-    const icons = { Submitted: 'clock', Reviewing: 'package', Printing: 'package', Completed: 'check-circle' };
-    return icons[status] || 'clock';
+    const icons = { Submitted: "clock", Reviewing: "package", Printing: "package", Completed: "check-circle" };
+    return icons[status] || "clock";
 }
 
 // ====================== PROJECT SUGGESTION (AI) ======================
-document.getElementById('suggestBtn').addEventListener('click', async () => {
-    const keyword = document.getElementById('projectKeyword').value.trim();
-    if (!keyword) return showToast('Enter a keyword', 'error');
+async function getProjectSuggestions() {
+    const keyword = safeGet("projectKeyword")?.value.trim();
+    if (!keyword) return showToast("Enter a keyword", "error");
 
     try {
-        const res = await fetch(`https://text.pollinations.ai/Generate 5 college project ideas for 3D printing related to ${keyword}`);
+        const prompt = `Generate 5 college project ideas for 3D printing related to ${keyword}`;
+        const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
         const text = await res.text();
-        const suggestions = text.split('\n').filter(line => line.trim()).slice(0, 5);
+        const suggestions = text.split("\n").filter((line) => line.trim()).slice(0, 5);
 
-        document.getElementById('suggestionsList').innerHTML = suggestions.map((s, i) => `
+        const list = safeGet("suggestionsList");
+        if (list) {
+            list.innerHTML = suggestions
+                .map(
+                    (s, i) => `
             <div class="suggestion-item">
                 <div class="suggestion-text">
-                    <span class="suggestion-number">${i+1}.</span> ${s}
+                    <span class="suggestion-number">${i + 1}.</span> ${s}
                 </div>
                 <button class="btn-whatsapp" onclick="contactWhatsApp('${s.replace(/'/g, "\\'")}')">
                     Discuss on WhatsApp
                 </button>
             </div>
-        `).join('');
+        `
+                )
+                .join("");
+        }
 
-        document.getElementById('suggestionsContainer').style.display = 'block';
+        const container = safeGet("suggestionsContainer");
+        if (container) container.style.display = "block";
         lucide.createIcons();
     } catch (e) {
-        showToast('Failed to get suggestions', 'error');
+        showToast("Failed to get suggestions", "error");
     }
-});
+}
 
 window.contactWhatsApp = (project) => {
     const msg = encodeURIComponent(`Hi NexLayer Lab! I like this project: "${project}". Can you help with 3D printing?`);
-    window.open(`https://wa.me/917078294661?text=${msg}`, '_blank');
+    window.open(`https://wa.me/917078294661?text=${msg}`, "_blank");
 };
 
 // ====================== INIT ======================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
-    loadCatalog();
-    loadDashboard();
+
+    // Auth
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        isAdmin = !!user && user.email === ADMIN_EMAIL;
+
+        const loginBtn = safeGet("loginBtn");
+        const logoutBtn = safeGet("logoutBtn");
+        const userGreeting = safeGet("userGreeting");
+        const userEmail = safeGet("userEmail");
+
+        if (loginBtn) loginBtn.style.display = user ? "none" : "inline-flex";
+        if (logoutBtn) logoutBtn.style.display = user ? "inline-flex" : "none";
+        if (userGreeting) userGreeting.style.display = user ? "inline" : "none";
+        if (user && userEmail) userEmail.textContent = user.email.split("@")[0];
+
+        loadDashboard();
+    });
+
+    // Auth modal and actions
+    safeGet("loginBtn")?.addEventListener("click", () => {
+        safeGet("authModal")?.classList.add("active");
+    });
+
+    safeGet("authClose")?.addEventListener("click", () => {
+        safeGet("authModal")?.classList.remove("active");
+    });
+
+    safeGet("toggleAuth")?.addEventListener("click", () => {
+        const title = safeGet("authTitle");
+        const btn = safeGet("authBtn");
+        if (!title || !btn) return;
+        if (title.textContent === "Login") {
+            title.textContent = "Sign Up";
+            btn.textContent = "Sign Up";
+        } else {
+            title.textContent = "Login";
+            btn.textContent = "Login";
+        }
+    });
+
+    safeGet("authBtn")?.addEventListener("click", async () => {
+        const email = safeGet("authEmail")?.value.trim();
+        const password = safeGet("authPassword")?.value;
+        const isSignup = safeGet("authBtn")?.textContent === "Sign Up";
+
+        if (!email || !password) {
+            showToast("Email and password are required", "error");
+            return;
+        }
+
+        try {
+            if (isSignup) {
+                await createUserWithEmailAndPassword(auth, email, password);
+                showToast("Account created successfully!");
+            } else {
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast("Logged in successfully!");
+            }
+            safeGet("authModal")?.classList.remove("active");
+        } catch (error) {
+            showToast(error.message, "error");
+        }
+    });
+
+    safeGet("logoutBtn")?.addEventListener("click", () => {
+        signOut(auth);
+    });
+
+    // Customize modal controls
+    ["customText", "customSize", "customColor", "customMaterial", "customQuantity"].forEach((id) => {
+        const el = safeGet(id);
+        if (el) {
+            el.addEventListener("input", () => {
+                updatePreview();
+                calculatePrice();
+            });
+        }
+    });
+
+    safeGet("placeOrderBtn")?.addEventListener("click", placeOrder);
+    safeGet("modalClose")?.addEventListener("click", () => safeGet("customizeModal")?.classList.remove("active"));
+
+    // File upload
+    const uploadZone = safeGet("uploadZone");
+    const fileInput = safeGet("fileInput");
+
+    if (uploadZone && fileInput) {
+        uploadZone.addEventListener("click", () => fileInput.click());
+        uploadZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadZone.classList.add("drag-active");
+        });
+        uploadZone.addEventListener("dragleave", () => uploadZone.classList.remove("drag-active"));
+        uploadZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove("drag-active");
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+    }
+
+    const filesList = safeGet("filesList");
+    if (filesList) {
+        filesList.addEventListener("click", (e) => {
+            const button = e.target.closest("button[data-action]");
+            if (!button) return;
+            const index = parseInt(button.dataset.index, 10);
+            if (Number.isNaN(index)) return;
+
+            if (button.dataset.action === "remove") {
+                removeFileByIndex(index);
+                return;
+            }
+
+            if (button.dataset.action === "preview") {
+                openFilePreview(index);
+            }
+        });
+    }
+
+    safeGet("filePreviewClose")?.addEventListener("click", closeFilePreview);
+
+    safeGet("submitOrderBtn")?.addEventListener("click", submitCustomOrder);
+
+    // Project suggestions
+    safeGet("suggestBtn")?.addEventListener("click", getProjectSuggestions);
 
     // Navbar scroll effect
-    window.addEventListener('scroll', () => {
-        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    window.addEventListener("scroll", () => {
+        const nav = safeGet("navbar");
+        if (nav) nav.classList.toggle("scrolled", window.scrollY > 20);
     });
 
     // Mobile menu
-    document.getElementById('mobileMenuToggle').addEventListener('click', () => {
-        document.getElementById('mobileNav').classList.toggle('active');
+    safeGet("mobileMenuToggle")?.addEventListener("click", () => {
+        safeGet("mobileNav")?.classList.toggle("active");
     });
 
     // Project toggle
-    document.getElementById('projectCardHeader').addEventListener('click', () => {
-        const content = document.getElementById('projectContent');
-        const chevron = document.getElementById('projectChevron');
-        const isHidden = content.style.display === 'none' || !content.style.display;
-        content.style.display = isHidden ? 'block' : 'none';
-        chevron.setAttribute('data-lucide', isHidden ? 'chevron-up' : 'chevron-down');
+    safeGet("projectCardHeader")?.addEventListener("click", () => {
+        const content = safeGet("projectContent");
+        const chevron = safeGet("projectChevron");
+        if (!content || !chevron) return;
+        const isHidden = content.style.display === "none" || !content.style.display;
+        content.style.display = isHidden ? "block" : "none";
+        chevron.setAttribute("data-lucide", isHidden ? "chevron-up" : "chevron-down");
         lucide.createIcons();
     });
+
+    // Initial render
+    loadCatalog();
+    loadDashboard();
+    updatePreview();
+    calculatePrice();
+    updateSubmitButton();
 });
