@@ -22,10 +22,12 @@
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
         import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/STLLoader.js';
         import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/OBJLoader.js';
+        import { ThreeMFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/3MFLoader.js';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js';
         window.THREE = THREE;
         window.STLLoader = STLLoader;
         window.OBJLoader = OBJLoader;
+        window.ThreeMFLoader = ThreeMFLoader;
         window.OrbitControls = OrbitControls;
     </script>
 </head>
@@ -63,6 +65,8 @@
             <a href="#catalog" class="mobile-nav-link">Catalog</a>
             <a href="#custom-order" class="mobile-nav-link">Custom Order</a>
             <a href="#dashboard" class="mobile-nav-link">Dashboard</a>
+            <button id="mobileLoginBtn" class="btn-secondary">Login</button>
+            <button id="mobileLogoutBtn" class="btn-secondary" style="display: none;">Logout</button>
         </div>
     </nav>
 

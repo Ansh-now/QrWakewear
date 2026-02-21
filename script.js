@@ -89,13 +89,54 @@ function safeGet(id) {
     return document.getElementById(id);
 }
 
+function getCurrencySymbol() {
+    return "\u20B9";
+}
+
+function normalizeSuggestionText(text) {
+    if (!text) return [];
+
+    let items = [];
+
+    if (/\n\s*\d+[\).\:-]\s*/.test(text)) {
+        items = text
+            .split(/\n?\s*\d+[\).\:-]\s*/)
+            .map((s) => s.trim())
+            .filter(Boolean);
+    } else {
+        items = text
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean);
+    }
+
+    const cleaned = items
+        .map((item) => item.replace(/^\s*[-•]\s*/, "").trim())
+        .map((item) => item.split(" - ")[0])
+        .map((item) => item.split(" — ")[0])
+        .map((item) => item.split(":")[0])
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+    if (cleaned.length >= 5) return cleaned.slice(0, 5);
+
+    const fallback = text
+        .split(/[.\n]/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((item) => item.split(" - ")[0].split(":")[0].trim())
+        .filter(Boolean);
+
+    return fallback.slice(0, 5);
+}
+
 // ====================== 3D PREVIEW ======================
 function loadPreview(index, file) {
     const container = document.getElementById(`preview-${index}`);
     if (!container) return;
 
     const ext = file.name.split(".").pop().toLowerCase();
-    if (!["stl", "obj"].includes(ext)) return;
+    if (!["stl", "obj", "3mf"].includes(ext)) return;
 
     container.innerHTML = "";
 
@@ -118,8 +159,18 @@ function loadPreview(index, file) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        let loader = ext === "stl" ? new STLLoader() : new OBJLoader();
-        let object = loader.parse(e.target.result);
+        let loader = null;
+        if (ext === "stl") loader = new STLLoader();
+        if (ext === "obj") loader = new OBJLoader();
+        if (ext === "3mf") loader = typeof ThreeMFLoader !== "undefined" ? new ThreeMFLoader() : null;
+
+        if (!loader) {
+            showToast("3D preview not available", "error");
+            return;
+        }
+
+        const data = e.target.result;
+        let object = loader.parse(data);
 
         if (object.isBufferGeometry) {
             object = new THREE.Mesh(object, new THREE.MeshPhongMaterial({ color: 0xaaaaaa, shininess: 30 }));
@@ -144,7 +195,12 @@ function loadPreview(index, file) {
         }
         animate();
     };
-    reader.readAsArrayBuffer(file);
+
+    if (ext === "obj") {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
 }
 
 // ====================== FILE UPLOAD ======================
@@ -160,6 +216,11 @@ function handleFiles(files) {
         const ext = "." + file.name.split(".").pop().toLowerCase();
         return [".stl", ".obj", ".3mf", ".png", ".jpg", ".jpeg"].includes(ext);
     });
+
+    if (validFiles.length === 0) {
+        showToast("Unsupported file type", "error");
+        return;
+    }
 
     uploadedFiles = [...uploadedFiles, ...validFiles];
     displayFiles();
@@ -224,7 +285,7 @@ function updateSubmitButton() {
 
 function renderModelPreview(container, file) {
     const ext = file.name.split(".").pop().toLowerCase();
-    if (!["stl", "obj"].includes(ext)) return;
+    if (!["stl", "obj", "3mf"].includes(ext)) return;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -245,8 +306,18 @@ function renderModelPreview(container, file) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        let loader = ext === "stl" ? new STLLoader() : new OBJLoader();
-        let object = loader.parse(e.target.result);
+        let loader = null;
+        if (ext === "stl") loader = new STLLoader();
+        if (ext === "obj") loader = new OBJLoader();
+        if (ext === "3mf") loader = typeof ThreeMFLoader !== "undefined" ? new ThreeMFLoader() : null;
+
+        if (!loader) {
+            showToast("3D preview not available", "error");
+            return;
+        }
+
+        const data = e.target.result;
+        let object = loader.parse(data);
 
         if (object.isBufferGeometry) {
             object = new THREE.Mesh(object, new THREE.MeshPhongMaterial({ color: 0xaaaaaa, shininess: 30 }));
@@ -271,7 +342,12 @@ function renderModelPreview(container, file) {
         }
         animate();
     };
-    reader.readAsArrayBuffer(file);
+
+    if (ext === "obj") {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
 }
 
 function openFilePreview(index) {
@@ -295,7 +371,7 @@ function openFilePreview(index) {
         img.onload = () => URL.revokeObjectURL(url);
         img.src = url;
         body.appendChild(img);
-    } else if (["stl", "obj"].includes(ext)) {
+    } else if (["stl", "obj", "3mf"].includes(ext)) {
         const canvasWrap = document.createElement("div");
         canvasWrap.className = "file-preview-canvas";
         body.appendChild(canvasWrap);
@@ -356,7 +432,7 @@ async function loadCatalog() {
             <div class="catalog-info">
                 <h3 class="catalog-title">${product.name}</h3>
                 <p class="catalog-description">${product.description}</p>
-                <p class="catalog-price">Starting at ₹${product.startingPrice}</p>
+                <p class="catalog-price">Starting at ${getCurrencySymbol()}${product.startingPrice}</p>
             </div>
         </div>
     `
@@ -414,7 +490,7 @@ function calculatePrice() {
     const total = (base + sizePrice + matPrice) * qty;
 
     const totalPrice = safeGet("totalPrice");
-    if (totalPrice) totalPrice.textContent = `₹${total}`;
+    if (totalPrice) totalPrice.textContent = `${getCurrencySymbol()}${total}`;
 }
 
 async function placeOrder() {
@@ -436,7 +512,7 @@ async function placeOrder() {
             material: safeGet("customMaterial")?.value,
             quantity: parseInt(safeGet("customQuantity")?.value, 10)
         },
-        totalPrice: parseInt((safeGet("totalPrice")?.textContent || "").replace("₹", ""), 10),
+        totalPrice: parseInt((safeGet("totalPrice")?.textContent || "").replace(getCurrencySymbol(), ""), 10),
         status: "Submitted",
         timestamp: new Date().toISOString()
     };
@@ -588,7 +664,11 @@ async function getProjectSuggestions() {
         const prompt = `Generate 5 college project ideas for 3D printing related to ${keyword}`;
         const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
         const text = await res.text();
-        const suggestions = text.split("\n").filter((line) => line.trim()).slice(0, 5);
+        const suggestions = normalizeSuggestionText(text);
+        if (suggestions.length === 0) {
+            showToast("No suggestions found. Try another keyword.", "error");
+            return;
+        }
 
         const list = safeGet("suggestionsList");
         if (list) {
@@ -632,11 +712,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loginBtn = safeGet("loginBtn");
         const logoutBtn = safeGet("logoutBtn");
+        const mobileLoginBtn = safeGet("mobileLoginBtn");
+        const mobileLogoutBtn = safeGet("mobileLogoutBtn");
         const userGreeting = safeGet("userGreeting");
         const userEmail = safeGet("userEmail");
 
         if (loginBtn) loginBtn.style.display = user ? "none" : "inline-flex";
         if (logoutBtn) logoutBtn.style.display = user ? "inline-flex" : "none";
+        if (mobileLoginBtn) mobileLoginBtn.style.display = user ? "none" : "inline-flex";
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = user ? "inline-flex" : "none";
         if (userGreeting) userGreeting.style.display = user ? "inline" : "none";
         if (user && userEmail) userEmail.textContent = user.email.split("@")[0];
 
@@ -646,6 +730,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Auth modal and actions
     safeGet("loginBtn")?.addEventListener("click", () => {
         safeGet("authModal")?.classList.add("active");
+    });
+
+    safeGet("mobileLoginBtn")?.addEventListener("click", () => {
+        safeGet("authModal")?.classList.add("active");
+        safeGet("mobileNav")?.classList.remove("active");
     });
 
     safeGet("authClose")?.addEventListener("click", () => {
@@ -683,6 +772,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 await signInWithEmailAndPassword(auth, email, password);
                 showToast("Logged in successfully!");
             }
+            currentUser = auth.currentUser;
+            isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+            loadDashboard();
             safeGet("authModal")?.classList.remove("active");
         } catch (error) {
             showToast(error.message, "error");
@@ -691,6 +783,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     safeGet("logoutBtn")?.addEventListener("click", () => {
         signOut(auth);
+    });
+
+    safeGet("mobileLogoutBtn")?.addEventListener("click", () => {
+        signOut(auth);
+        safeGet("mobileNav")?.classList.remove("active");
     });
 
     // Customize modal controls
@@ -713,6 +810,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (uploadZone && fileInput) {
         uploadZone.addEventListener("click", () => fileInput.click());
+        uploadZone.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            fileInput.click();
+        });
         uploadZone.addEventListener("dragover", (e) => {
             e.preventDefault();
             uploadZone.classList.add("drag-active");
@@ -724,7 +825,10 @@ document.addEventListener("DOMContentLoaded", () => {
             handleFiles(e.dataTransfer.files);
         });
 
-        fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+        fileInput.addEventListener("change", (e) => {
+            handleFiles(e.target.files);
+            e.target.value = "";
+        });
     }
 
     const filesList = safeGet("filesList");
