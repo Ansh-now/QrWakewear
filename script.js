@@ -99,11 +99,11 @@ function getCurrencySymbol() {
 async function ensureThreeLoaded() {
     if (threeReadyPromise) return threeReadyPromise;
     threeReadyPromise = (async () => {
-        const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js");
-        const { STLLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/STLLoader.js");
-        const { OBJLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/OBJLoader.js");
-        const { ThreeMFLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/3MFLoader.js");
-        const { OrbitControls } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js");
+        const THREE = await import("three");
+        const { STLLoader } = await import("three/addons/loaders/STLLoader.js");
+        const { OBJLoader } = await import("three/addons/loaders/OBJLoader.js");
+        const { ThreeMFLoader } = await import("three/addons/loaders/3MFLoader.js");
+        const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
 
         return { THREE, STLLoader, OBJLoader, ThreeMFLoader, OrbitControls };
     })();
