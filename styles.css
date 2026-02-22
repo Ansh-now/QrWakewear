@@ -1517,7 +1517,31 @@ section {
 
 @media (max-width: 600px) {
     .navbar {
-        height: 72px;
+        height: auto;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 16px 8px;
+    }
+
+    .navbar-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .navbar-actions .btn-primary,
+    .navbar-actions .btn-secondary {
+        min-height: 42px;
+        padding: 8px 12px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+
+    #userGreeting {
+        font-size: 12px;
     }
 
     .hero-section {
@@ -1558,6 +1582,20 @@ section {
 
     .modal-content {
         width: 92%;
+    }
+
+    .process-grid {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(220px, 80%);
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .process-card {
+        scroll-snap-align: start;
     }
 }
 

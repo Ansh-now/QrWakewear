@@ -982,6 +982,42 @@ document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
     });
 
+    // Mobile auto-swipe for "How It Works"
+    const processGrid = document.querySelector(".process-grid");
+    if (processGrid) {
+        let autoScrollId = null;
+        let paused = false;
+
+        const startAutoScroll = () => {
+            if (autoScrollId || window.innerWidth > 600) return;
+            autoScrollId = setInterval(() => {
+                if (paused) return;
+                const maxScroll = processGrid.scrollWidth - processGrid.clientWidth;
+                const next = Math.min(processGrid.scrollLeft + 260, maxScroll);
+                processGrid.scrollTo({ left: next, behavior: "smooth" });
+                if (next >= maxScroll) {
+                    setTimeout(() => processGrid.scrollTo({ left: 0, behavior: "smooth" }), 800);
+                }
+            }, 2400);
+        };
+
+        const stopAutoScroll = () => {
+            if (autoScrollId) clearInterval(autoScrollId);
+            autoScrollId = null;
+        };
+
+        processGrid.addEventListener("pointerdown", () => (paused = true));
+        processGrid.addEventListener("pointerup", () => (paused = false));
+        processGrid.addEventListener("touchstart", () => (paused = true), { passive: true });
+        processGrid.addEventListener("touchend", () => (paused = false), { passive: true });
+        window.addEventListener("resize", () => {
+            stopAutoScroll();
+            startAutoScroll();
+        });
+
+        startAutoScroll();
+    }
+
     // Initial render
     loadCatalog();
     loadDashboard();
