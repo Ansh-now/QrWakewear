@@ -59,7 +59,7 @@ let currentProduct = null;
 let currentUser = null;
 let isAdmin = false;
 
-const ADMIN_EMAIL = "anshyadav0135@gmail.com";
+const ADMIN_UID = "e4ics7OCBRX0d50CWmIj1dy0w2r2";
 
 let catalogData = [];
 let threeReadyPromise = null;
@@ -479,7 +479,7 @@ function renderCatalog(products) {
 
 function loadCatalog() {
     renderCatalog([]);
-    const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "products"));
     onSnapshot(
         q,
         (snapshot) => {
@@ -797,7 +797,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Auth
     onAuthStateChanged(auth, (user) => {
         currentUser = user;
-        isAdmin = !!user && user.email === ADMIN_EMAIL;
+        isAdmin = !!user && user.uid === ADMIN_UID;
 
         const loginBtn = safeGet("loginBtn");
         const logoutBtn = safeGet("logoutBtn");
@@ -862,7 +862,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showToast("Logged in successfully!");
             }
             currentUser = auth.currentUser;
-            isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+            isAdmin = !!currentUser && currentUser.uid === ADMIN_UID;
             loadDashboard();
             safeGet("authModal")?.classList.remove("active");
         } catch (error) {
@@ -876,7 +876,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await signInWithPopup(auth, provider);
             showToast("Logged in with Google!");
             currentUser = auth.currentUser;
-            isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+            isAdmin = !!currentUser && currentUser.uid === ADMIN_UID;
             loadDashboard();
             safeGet("authModal")?.classList.remove("active");
         } catch (error) {
