@@ -10,7 +10,9 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -46,6 +48,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+    console.warn("Auth persistence not available:", error);
+});
 
 // ====================== STATE ======================
 let uploadedFiles = [];
@@ -99,11 +105,7 @@ async function ensureThreeLoaded() {
         const { ThreeMFLoader } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/loaders/3MFLoader.js");
         const { OrbitControls } = await import("https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js");
 
-        window.THREE = THREE;
-        window.STLLoader = STLLoader;
-        window.OBJLoader = OBJLoader;
-        window.ThreeMFLoader = ThreeMFLoader;
-        window.OrbitControls = OrbitControls;
+        return { THREE, STLLoader, OBJLoader, ThreeMFLoader, OrbitControls };
     })();
     return threeReadyPromise;
 }
@@ -168,14 +170,16 @@ async function loadPreview(index, file) {
     if (!["stl", "obj", "3mf"].includes(ext)) return;
 
     container.innerHTML = "";
-    await ensureThreeLoaded();
+    const { THREE, STLLoader, OBJLoader, ThreeMFLoader, OrbitControls } = await ensureThreeLoaded();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / 220, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, 220);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    const width = container.clientWidth || container.offsetWidth || 300;
+    renderer.setSize(width, 220);
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -192,7 +196,7 @@ async function loadPreview(index, file) {
         let loader = null;
         if (ext === "stl") loader = new STLLoader();
         if (ext === "obj") loader = new OBJLoader();
-        if (ext === "3mf") loader = typeof ThreeMFLoader !== "undefined" ? new ThreeMFLoader() : null;
+        if (ext === "3mf") loader = new ThreeMFLoader();
 
         if (!loader) {
             showToast("3D preview not available", "error");
@@ -317,14 +321,17 @@ async function renderModelPreview(container, file) {
     const ext = file.name.split(".").pop().toLowerCase();
     if (!["stl", "obj", "3mf"].includes(ext)) return;
 
-    await ensureThreeLoaded();
+    const { THREE, STLLoader, OBJLoader, ThreeMFLoader, OrbitControls } = await ensureThreeLoaded();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
 
-    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
+    const width = container.clientWidth || container.offsetWidth || 300;
+    const height = container.clientHeight || 260;
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -341,7 +348,7 @@ async function renderModelPreview(container, file) {
         let loader = null;
         if (ext === "stl") loader = new STLLoader();
         if (ext === "obj") loader = new OBJLoader();
-        if (ext === "3mf") loader = typeof ThreeMFLoader !== "undefined" ? new ThreeMFLoader() : null;
+        if (ext === "3mf") loader = new ThreeMFLoader();
 
         if (!loader) {
             showToast("3D preview not available", "error");
@@ -635,6 +642,11 @@ function loadDashboard() {
     const container = safeGet("dashboardContent");
     if (!container) return;
 
+    if (!currentUser && auth.currentUser) {
+        currentUser = auth.currentUser;
+        isAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+    }
+
     if (!currentUser) {
         if (ordersUnsub) {
             ordersUnsub();
@@ -777,6 +789,10 @@ window.contactWhatsApp = (project) => {
 // ====================== INIT ======================
 document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
+
+    if (location.protocol === "file:") {
+        showToast("Firebase auth needs a local server (not file://). Run a local server and add the domain in Firebase.", "error");
+    }
 
     // Auth
     onAuthStateChanged(auth, (user) => {
