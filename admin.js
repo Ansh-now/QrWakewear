@@ -62,6 +62,12 @@ function showToast(message, type = "success") {
     setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
+function reportError(context, error) {
+    console.error(`${context} failed:`, error);
+    const message = error?.message || `${context} failed unexpectedly`;
+    showToast(message, "error");
+}
+
 function setButtonLoading(button, isLoading, text = "Loading...") {
     if (!button) return;
     if (isLoading) {
@@ -126,7 +132,7 @@ async function loadProducts() {
             .join("");
         lucide.createIcons();
     } catch (error) {
-        showToast(error.message, "error");
+        reportError("Load products", error);
     }
 }
 
@@ -186,7 +192,7 @@ async function addProduct() {
 
         loadProducts();
     } catch (error) {
-        showToast(error.message, "error");
+        reportError(productId ? "Update product" : "Add product", error);
     } finally {
         setButtonLoading(actionBtn, false);
     }
@@ -199,7 +205,7 @@ async function deleteProduct(productId) {
         showToast("Product deleted");
         loadProducts();
     } catch (error) {
-        showToast(error.message, "error");
+        reportError("Delete product", error);
     }
 }
 
@@ -266,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await signInWithEmailAndPassword(auth, email, password);
             showToast("Logged in successfully!");
         } catch (error) {
-            showToast(error.message, "error");
+            reportError("Admin login", error);
         }
     });
 
