@@ -1651,3 +1651,38 @@ section {
     border-radius: 8px;
     overflow: hidden;
 }
+
+/* ================================
+   GLOBAL MOBILE OVERFLOW FIX
+================================ */
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+}
+
+/* prevent any element causing scroll */
+* {
+    max-width: 100%;
+}
+
+/* ================================
+   NAVBAR RESPONSIVE FIX
+================================ */
+
+@media (max-width: 1024px) {
+
+    .navbar-content {
+        padding: 0 20px !important;
+    }
+
+    .navbar-links {
+        display: none !important;
+    }
+
+    .mobile-menu-toggle {
+        display: block !important;
+    }
+
+}

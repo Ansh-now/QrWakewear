@@ -14,7 +14,7 @@ import {
     setPersistence,
     browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
     getFirestore,
     collection,
@@ -478,32 +478,30 @@ function renderCatalog(products) {
 }
 
 function loadCatalog() {
-    renderCatalog([]);
-    const q = query(collection(db, "products"));
+
+    const q = query(
+        collection(db, "products"),
+        orderBy("createdAt", "desc")
+    );
+
     onSnapshot(
         q,
         (snapshot) => {
-            const products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-            if (products.length === 0) {
-                renderCatalog([]);
-                const grid = safeGet("catalogGrid");
-                if (grid) {
-                    grid.innerHTML = `
-                        <div class="glass-card empty-state">
-                            <h3>No Products Yet</h3>
-                            <p class="text-secondary">Admin can add products from the admin panel.</p>
-                        </div>`;
-                }
-                return;
-            }
+
+            const products = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
             renderCatalog(products);
+
         },
-        () => {
-            renderCatalog([]);
+        (error) => {
+            console.error("Firestore realtime error:", error);
+            showToast("Realtime database connection failed", "error");
         }
     );
 }
-
 window.openCustomizeModal = (productId) => {
     if (!currentUser) {
         showToast("Please login to customize", "error");
@@ -577,7 +575,8 @@ async function placeOrder() {
         },
         totalPrice: parseInt((safeGet("totalPrice")?.textContent || "").replace(getCurrencySymbol(), ""), 10),
         status: "Submitted",
-        timestamp: new Date().toISOString()
+        
+        timestamp: serverTimestamp()
     };
 
     try {
@@ -1025,3 +1024,13 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatePrice();
     updateSubmitButton();
 });
+
+// ====================== MOBILE NAV ======================
+const mobileToggle = document.getElementById("mobileMenuToggle");
+const mobileNav = document.getElementById("mobileNav");
+
+if (mobileToggle && mobileNav) {
+    mobileToggle.addEventListener("click", () => {
+        mobileNav.classList.toggle("active");
+    });
+}

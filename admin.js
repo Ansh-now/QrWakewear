@@ -23,13 +23,6 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const firebaseConfig = {
     apiKey: "AIzaSyCmWI6jwHR0zbiYMFwfxuh9paS3ET9qvuE",
     authDomain: "nexlayelabs.firebaseapp.com",
@@ -45,7 +38,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 const ADMIN_EMAIL = "anshyadav0135@gmail.com";
 let currentUser = null;
@@ -80,13 +72,6 @@ function setButtonLoading(button, isLoading, text = "Loading...") {
         button.classList.remove("is-loading");
         button.disabled = false;
     }
-}
-
-async function uploadProductImage(file) {
-    const imageId = crypto.randomUUID();
-    const storageRef = ref(storage, `products/${imageId}/${file.name}`);
-    await uploadBytes(storageRef, file);
-    return getDownloadURL(storageRef);
 }
 
 async function loadProducts() {
@@ -147,24 +132,24 @@ async function addProduct() {
     const description = safeGet("productDescription")?.value.trim();
     const price = parseInt(safeGet("productPrice")?.value, 10);
     const imageUrl = safeGet("productImageUrl")?.value.trim();
-    const imageFile = safeGet("productImageFile")?.files?.[0];
 
     if (!name || !description || Number.isNaN(price)) {
         showToast("Name, description, and price are required", "error");
         return;
     }
 
-    let finalImageUrl = imageUrl;
+    if (!imageUrl) {
+        showToast("Image URL is required", "error");
+        return;
+    }
+
+    const finalImageUrl = imageUrl;
 
     const actionBtn = safeGet("addProductBtn");
     try {
         setButtonLoading(actionBtn, true, productId ? "Updating..." : "Adding...");
-        if (imageFile) {
-            finalImageUrl = await uploadProductImage(imageFile);
-        }
-
         if (!finalImageUrl) {
-            showToast("Provide an image URL or upload an image", "error");
+            showToast("Provide an image URL", "error");
             return;
         }
 
@@ -215,7 +200,6 @@ function resetForm() {
     safeGet("productDescription").value = "";
     safeGet("productPrice").value = "199";
     safeGet("productImageUrl").value = "";
-    safeGet("productImageFile").value = "";
     safeGet("addProductBtn").textContent = "Add Product";
     const cancelBtn = safeGet("cancelEditBtn");
     if (cancelBtn) cancelBtn.style.display = "none";
@@ -227,7 +211,6 @@ function populateForm(product) {
     safeGet("productDescription").value = product.description || "";
     safeGet("productPrice").value = product.startingPrice || 0;
     safeGet("productImageUrl").value = product.image || "";
-    safeGet("productImageFile").value = "";
     safeGet("addProductBtn").textContent = "Update Product";
     const cancelBtn = safeGet("cancelEditBtn");
     if (cancelBtn) cancelBtn.style.display = "inline-flex";
