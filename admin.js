@@ -23,15 +23,15 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCmWI6jwHR0zbiYMFwfxuh9paS3ET9qvuE",
-    authDomain: "nexlayelabs.firebaseapp.com",
-    databaseURL: "https://nexlayelabs-default-rtdb.firebaseio.com",
-    projectId: "nexlayelabs",
-    storageBucket: "nexlayelabs.firebasestorage.app",
-    messagingSenderId: "414827106722",
-    appId: "1:414827106722:web:0327f53494da1afe69a2fb",
-    measurementId: "G-RXBD8D8Q5Q"
+    apiKey: "AIzaSyBqXMwAZSsKi8_LGWmnPF36Z1jyZzDVPCM",
+    authDomain: "nexlayerlab.firebaseapp.com",
+    projectId: "nexlayerlab",
+    storageBucket: "nexlayerlab.firebasestorage.app",
+    messagingSenderId: "52859959386",
+    appId: "1:52859959386:web:c863a84e27e45a825e4063",
+    measurementId: "G-K9D5YVQ8L8"
   };
   
 

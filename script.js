@@ -34,15 +34,16 @@ import {
     getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// Firebase Config (New Project)
 const firebaseConfig = {
-    apiKey: "AIzaSyCmWI6jwHR0zbiYMFwfxuh9paS3ET9qvuE",
-    authDomain: "nexlayelabs.firebaseapp.com",
-    projectId: "nexlayelabs",
-    storageBucket: "nexlayelabs.firebasestorage.app",
-    messagingSenderId: "414827106722",
-    appId: "1:414827106722:web:0327f53494da1afe69a2fb"
-};
+    apiKey: "AIzaSyBqXMwAZSsKi8_LGWmnPF36Z1jyZzDVPCM",
+    authDomain: "nexlayerlab.firebaseapp.com",
+    projectId: "nexlayerlab",
+    storageBucket: "nexlayerlab.firebasestorage.app",
+    messagingSenderId: "52859959386",
+    appId: "1:52859959386:web:c863a84e27e45a825e4063",
+    measurementId: "G-K9D5YVQ8L8"
+  };
+  
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
