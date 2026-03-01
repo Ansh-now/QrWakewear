@@ -73,51 +73,40 @@ function setButtonLoading(button, isLoading, text = "Loading...") {
         button.disabled = false;
     }
 }
-
 async function loadProducts() {
+
     const list = safeGet("adminProductsList");
     if (!list) return;
 
     try {
-        list.innerHTML = `<div class="glass-card empty-state"><h3>Loading Products...</h3></div>`;
-        const snapshot = await getDocs(query(collection(db, "products"), orderBy("createdAt", "desc")));
-        const products = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
-        if (products.length === 0) {
+        list.innerHTML = `<div class="glass-card empty-state"><h3>Loading Products...</h3></div>`;
+
+        const snapshot = await getDocs(collection(db, "products"));
+
+        if (snapshot.empty) {
             list.innerHTML = `<div class="glass-card empty-state"><h3>No Products Yet</h3></div>`;
             return;
         }
 
-        list.innerHTML = products
-            .map(
-                (product) => `
+        const products = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        list.innerHTML = products.map(product => `
             <div class="glass-card catalog-card" data-id="${product.id}">
-                <div class="catalog-image">
-                    <img src="${product.image}" alt="${product.name}" loading="lazy">
-                </div>
                 <div class="catalog-info">
-                    <h3 class="catalog-title">${product.name}</h3>
-                    <p class="catalog-description">${product.description}</p>
-                    <p class="catalog-price">Starting at ₹${product.startingPrice}</p>
-                    <div style="margin-top: 16px; display: flex; gap: 12px;">
-                        <button class="btn-secondary" data-action="edit"
-                            data-id="${product.id}"
-                            data-name="${product.name}"
-                            data-description="${product.description}"
-                            data-price="${product.startingPrice}"
-                            data-image="${product.image}">
-                            Edit
-                        </button>
-                        <button class="btn-secondary" data-action="delete" data-id="${product.id}">Delete</button>
-                    </div>
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p>₹${product.startingPrice}</p>
                 </div>
             </div>
-        `
-            )
-            .join("");
-        lucide.createIcons();
+        `).join("");
+
     } catch (error) {
-        reportError("Load products", error);
+        console.error("Load products error:", error);
+        showToast("Failed to load products", "error");
     }
 }
 
@@ -168,7 +157,7 @@ async function addProduct() {
                 description,
                 startingPrice: price,
                 image: finalImageUrl,
-                createdAt: serverTimestamp()
+                createdAt: Date.now()
             });
             showToast("Product added successfully!");
         }
